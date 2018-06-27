@@ -3,9 +3,26 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os/exec"
 	"strconv"
+	"strings"
+
+	dbw "./db"
 )
+
+// GetUser get girl from vk by screenname
+func GetUser(screenname string) (user dbw.User, err error) {
+	cmd := exec.Command("python3", append([]string{SCRIPTS_PATH + "get_girl_by_vkid.py"}, screenname)...)
+	bytes, err := cmd.Output()
+
+	if err == nil {
+		err = json.Unmarshal(bytes, &user)
+	}
+
+	return user, err
+}
 
 func RandomUserHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
@@ -40,12 +57,22 @@ func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddUserHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
+	if r.Method == "GET" {
 		r.ParseForm()
 
-		if vkid, ok := r.Form["vkid"]; ok {
-			fmt.Println(vkid)
+		if url, ok := r.Form["url"]; ok {
+			pieces := strings.Split(url[0], "/")
+			scname := pieces[len(pieces)-1]
+
+			user, err := GetUser(scname)
+
+			if err == nil {
+				dbwrap.AddUser(user)
+			} else {
+				log.Println(err)
+			}
 		}
+
 	}
 }
 

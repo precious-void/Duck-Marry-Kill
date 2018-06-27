@@ -18,7 +18,7 @@ type User struct {
 	VKId     int    `bson:"vkid" json:"vkid"` // used to identify users in database
 	Name     string `bson:"name" json:"name"`
 	Sex      bool   `bson:"sex" json:"sex"`
-	PhotoURL string `bson:"photo_urls" json:"photo_urls"`
+	PhotoURL string `bson:"photo_url" json:"photo_url"`
 	Stats    Stats  `bson:"stats" json:"stats"`
 }
 
