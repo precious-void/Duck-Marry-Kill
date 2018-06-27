@@ -10,7 +10,7 @@ window.onload = function() {
     img2.className += " married";
     img3.className += " killed";
 
-    /*var i = 0;
+    var i = 0;
     imgs.forEach(e => {
         if(e.className.includes("fucked")) {
             imgText[i].innerHTML = "You chose to fuck it";
@@ -22,6 +22,6 @@ window.onload = function() {
             imgText[i].innerHTML = "You chose to kill it";
         }
         i += 1;
-    });*/
+    });
 
 }
