@@ -1,44 +1,117 @@
-.photo-wrapper {
-	width: 30vw;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-    justify-content: center;
+/*--------------------------------- Common ---------------------------------*/
+
+* {
+    margin: 0;
+    padding: 0;
 }
 
-.photo-wrapper img {
-    border-radius: 20px;
-    border: 2mm solid #BF360C;
-
-	max-width: 100%;
-	max-height: 65vh;
-	margin-bottom: 10pt;
+html {
+    min-height: 100vh;
+    min-width: 100vw;
+    overflow: hidden;
 }
 
-.console {
-    text-align: center;
+/*--------------------------------- Navbar ---------------------------------*/
+
+.nav {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 3vh 0;
+    font-family: 'Fjalla One', sans-serif;
     font-weight: bold;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
-.text-wrapper {
-    padding: 1vw;
-    text-align: center;
+.nav li a {
+    display: block;
+    text-decoration: none;
+    color: black;
 }
 
-regular {
-    font-family: 'Poppins', sans-serif;
-    text-align: center;
-    font-weight: bold;
+.nav li a:hover {
+    color: green;
+    transition: all 0.4s ease;
 }
 
-action {
-    font-family: 'Poppins', sans-serif;
-    text-align: center;
-    font-weight: bold;
-    color: #BF360C;
+.nav li a.active {
+    color: green;
 }
 
-.center {
+#logo {
+    position: absolute;
+    top: 1.5vh;
+    left: 1.5vh;
+    width: 8vw;
+}
+
+/*--------------------------------- Main ---------------------------------*/
+
+.wrapper {
+    width: 100vw;
+    height: 93vh;
+    margin: auto 0;
+}
+
+.wrapper ul {
+    display: flex;
+    flex-direction: row;
+    height: 65%;
+    padding-top: 5%;
+}
+
+.wrapper ul li {
+    display: flex;
+    flex-direction: column;
+    width: calc(100%/3);
+}
+
+.wrapper .imgWrapper {
+    width: 75%;
     margin: auto;
-    width: 50%;
+    overflow: hidden;
+    border-radius: 10%;
+    border: 4px solid gray;
+}
+
+.wrapper .imgWrapper img {
+    display: block;
+    max-width: 100%; 
+}
+
+.wrapper .imgWrapper.fucked {
+    border: 4px solid rgb(211, 69, 69);
+}
+.wrapper .imgWrapper.married {
+    border: 4px solid orange;
+}
+.wrapper .imgWrapper.killed {
+    border: 4px solid green;
+}
+
+.wrapper .imgText {
+    font-family: 'Fjalla One', sans-serif;
+    font-size: 1em;
+    margin: 0 auto;
+}
+
+.wrapper .text {
+    font-family: 'Fjalla One', sans-serif;
+    font-size: 1em;
+}
+
+/* ------------------------------------- Footer ------------------------------------- */
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+footer .text {      
+    color: black;
+    font-size: 1em;
+    padding-left: 0.2em;
 }
