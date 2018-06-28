@@ -40,11 +40,11 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 // FDKHandler makes everything work
 func FDKHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		men, err := db.GetRandomUsers(3, true)
+		men, err := dbwrap.GetRandomUsers(3, true)
 		if err != nil {
 			panic(err)
 		}
-		women, err := db.GetRandomUsers(3, false)
+		women, err := dbwrap.GetRandomUsers(3, false)
 		if err != nil {
 			panic(err)
 		}
@@ -73,6 +73,6 @@ func FDKStatsHandler(w http.ResponseWriter, r *http.Request) {
 			j, _ := strconv.Atoi(i)
 			ids = append(ids, j)
 		}
-		db.UpdateUserStats(ids)
+		dbwrap.UpdateUserStats(ids)
 	}
 }

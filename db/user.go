@@ -13,7 +13,6 @@ type Stats struct {
 	Marrys int `bson:"marrys" json:"marrys"`
 }
 
-//{vkid:4, name:"fourth", sex:false, photo_url:"../static/img/img4.jpg"}
 // User - basically stores user information
 type User struct {
 	VKId     int    `bson:"vkid" json:"vkid"` // used to identify users in database
