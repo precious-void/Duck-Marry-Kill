@@ -33,25 +33,25 @@ func (e *notEnoughPicsError) Error() string {
 
 // AddUser adds user to database
 // TODO: more comfortable adding
-func (dbw *DBW) AddUser(user User) error {
+func (dbw *Wrapper) AddUser(user User) error {
 	err := dbw.Users.Insert(user)
 	return err
 }
 
 // DeleteUser deletes a user with given vkid
-func (dbw *DBW) DeleteUser(vkid int) error {
+func (dbw *Wrapper) DeleteUser(vkid int) error {
 	return dbw.Users.Remove(bson.M{"vkid": vkid})
 }
 
 // GetRandomUsers samples {size} users with given sex from database
-func (dbw *DBW) GetRandomUsers(size int, sex bool) (users []User, err error) {
+func (dbw *Wrapper) GetRandomUsers(size int, sex bool) (users []User, err error) {
 	pipe := dbw.Users.Pipe([]bson.M{{"$match": bson.M{"sex": sex}}, {"$sample": bson.M{"size": size}}})
 	err = pipe.All(&users)
 
 	return users, err
 }
 
-func (dbw *DBW) UpdateUserStats(vkids []int) {
+func (dbw *Wrapper) UpdateUserStats(vkids []int) {
 	dbw.Users.Update(bson.M{"vkid": vkids[0]}, bson.M{"$inc": bson.M{"stats.fucks": 1}})
 	dbw.Users.Update(bson.M{"vkid": vkids[1]}, bson.M{"$inc": bson.M{"stats.marrys": 1}})
 	dbw.Users.Update(bson.M{"vkid": vkids[2]}, bson.M{"$inc": bson.M{"stats.kills": 1}})

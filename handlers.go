@@ -3,96 +3,76 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	"html/template"
 	"net/http"
-	"os/exec"
 	"strconv"
-	"strings"
 
-	dbw "./db"
+	"github.com/gorilla/sessions"
 )
 
-// GetUser get girl from vk by screenname
-func GetUser(screenname string) (user dbw.User, err error) {
-	cmd := exec.Command("python3", append([]string{SCRIPTS_PATH + "get_girl_by_vkid.py"}, screenname)...)
-	bytes, err := cmd.Output()
+var (
+	key   = []byte("EF495401D79526606BC45A351DED18E661333B2013451B06153C6CB8ACB88962")
+	store *sessions.CookieStore
+)
 
-	if err == nil {
-		err = json.Unmarshal(bytes, &user)
+func init() {
+	store = sessions.NewCookieStore(key)
+	store.Options = &sessions.Options{
+		Path:     "/",
+		MaxAge:   86400,
+		HttpOnly: true, // TODO: delete this for https
 	}
-
-	return user, err
 }
 
-func RandomUserHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+// MainHandler is for main page
+func mainHandler(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, "FDK")
+	if err != nil {
+		panic(err)
+	}
 
-	//fmt.Print(r.Form)
+	err = template.Must(template.New("template").ParseGlob("templates/*")).ExecuteTemplate(w, "index.html", session)
+	if err != nil {
+		panic(err)
+	}
+}
 
-	if sex, ok := r.Form["sex"]; ok {
-		val, err := strconv.ParseBool(sex[0])
-
-		if err == nil {
-			users, _ := dbwrap.GetRandomUsers(3, val)
-			b, _ := json.Marshal(users)
-
-			fmt.Fprintln(w, string(b))
+// FDKHandler makes everything work
+func FDKHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		men, err := dbwrap.GetRandomUsers(3, true)
+		if err != nil {
+			panic(err)
 		}
+		women, err := dbwrap.GetRandomUsers(3, false)
+		if err != nil {
+			panic(err)
+		}
+		s, err := json.Marshal(append(men, women...))
+		if err != nil {
+			panic(err)
+		}
+		fmt.Fprintf(w, string(s))
 	}
 }
 
-func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
+type Data struct {
+	Ids []string
+}
+
+func FDKStatsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		r.ParseForm()
-		// TODO: add admin checking
-
-		if vkid, ok := r.Form["vkid"]; ok {
-			val, err := strconv.Atoi(vkid[0])
-
-			if err == nil {
-				dbwrap.DeleteUser(val)
-			}
+		var d Data
+		err := json.NewDecoder(r.Body).Decode(&d)
+		if err != nil {
+			panic(err)
 		}
-	}
-}
+		var ids = []int{}
 
-func AddUserHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		r.ParseForm()
-
-		if url, ok := r.Form["url"]; ok {
-			pieces := strings.Split(url[0], "/")
-			scname := pieces[len(pieces)-1]
-
-			user, err := GetUser(scname)
-
-			if err == nil {
-				dbwrap.AddUser(user)
-			} else {
-				log.Println(err)
-			}
+		for _, i := range d.Ids {
+			j, _ := strconv.Atoi(i)
+			ids = append(ids, j)
 		}
-
-	}
-}
-
-func UpdateUserStatsHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		r.ParseForm()
-
-		if vkids, ok := r.Form["vkid"]; ok {
-			if len(vkids) == 3 {
-				var users []int
-
-				for _, user := range vkids {
-					vkid, err := strconv.Atoi(user)
-
-					if err == nil {
-						users = append(users, vkid)
-					}
-				}
-				dbwrap.UpdateUserStats(users)
-			}
-		}
+		dbwrap.UpdateUserStats(ids)
 	}
 }
