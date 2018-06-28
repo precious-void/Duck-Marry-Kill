@@ -3,13 +3,16 @@ package main
 import (
 	"net/http"
 
-	db "./db"
 	"gopkg.in/mgo.v2"
+
+	db "./db"
 )
 
 var (
-	session, _ = mgo.Dial("localhost:27017")
-	dbwrap     = db.NewDBW(session.DB("fmk"))
+	info, _     = mgo.ParseURL(DBURI)
+	sess, dberr = mgo.DialWithInfo(info)
+	dbase       = sess.DB(DBNAME)
+	dbwrap      = db.NewDBW(dbase)
 )
 
 func main() {
