@@ -16,7 +16,7 @@ import (
 
 // GetUser get girl from vk by screenname
 func GetUser(screenname string) (user dbw.User, err error) {
-	cmd := exec.Command("python3", append([]string{SCRIPTS_PATH + "get_girl_by_vkid.py"}, screenname)...)
+	cmd := exec.Command("python3", append([]string{SCRIPTSPATH + "get_girl_by_vkid.py"}, screenname)...)
 	bytes, err := cmd.Output()
 
 	if err == nil {

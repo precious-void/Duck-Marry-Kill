@@ -11,16 +11,16 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-// DBW is a mongo database wrapper
-type DBW struct {
+// Wrapper is a mongo database wrapper
+type Wrapper struct {
 	Users  *mgo.Collection
 	Admins *mgo.Collection
 	Keys   *mgo.Collection
 }
 
-// NewDBW creates a DB instance
-func NewDBW(database *mgo.Database) *DBW {
-	dbw := new(DBW)
+// NewWrapper creates a DB instance
+func NewWrapper(database *mgo.Database) *Wrapper {
+	dbw := new(Wrapper)
 
 	dbw.Users = database.C("users")
 	dbw.Admins = database.C("admins")

@@ -14,7 +14,7 @@ type Admin struct {
 }
 
 // CreateUser cretes and returns a new user
-func (dbw *DBW) CreateUser() Admin {
+func (dbw *Wrapper) CreateUser() Admin {
 	uid, _ := dbw.Admins.Count()
 
 	user := Admin{
@@ -28,7 +28,7 @@ func (dbw *DBW) CreateUser() Admin {
 }
 
 // IsUserAdmin tells if user has admin privelegies
-func (dbw *DBW) IsUserAdmin(uid int) (bool, error) {
+func (dbw *Wrapper) IsUserAdmin(uid int) (bool, error) {
 	var usr Admin
 	err := dbw.Admins.Find(bson.M{"uid": uid}).One(&usr)
 
@@ -36,7 +36,7 @@ func (dbw *DBW) IsUserAdmin(uid int) (bool, error) {
 }
 
 // GiveAdminPrivs gives admin priveleges to user with given ID
-func (dbw *DBW) GiveAdminPrivs(userID int, keyVal string) (err error) {
+func (dbw *Wrapper) GiveAdminPrivs(userID int, keyVal string) (err error) {
 	var key Key
 
 	if dbw.Keys.Find(bson.M{"value": keyVal}).One(&key); key.CleatorID == userID {
@@ -76,7 +76,7 @@ func (e *permissionError) Error() string {
 }
 
 // GenerateKey creates and return a random key
-func (dbw *DBW) GenerateKey(providerID int) (key Key, err error) {
+func (dbw *Wrapper) GenerateKey(providerID int) (key Key, err error) {
 	if is, err := dbw.IsUserAdmin(providerID); is {
 		key = Key{providerID, randStringRunes(6)}
 
@@ -89,7 +89,7 @@ func (dbw *DBW) GenerateKey(providerID int) (key Key, err error) {
 }
 
 // GetUsersKeys returns all the keys created by user
-func (dbw *DBW) GetUsersKeys(creatorID int) (keys []Key, err error) {
+func (dbw *Wrapper) GetUsersKeys(creatorID int) (keys []Key, err error) {
 	err = dbw.Keys.Find(bson.M{
 		"creator_id": creatorID,
 	}).All(&keys)
@@ -98,7 +98,7 @@ func (dbw *DBW) GetUsersKeys(creatorID int) (keys []Key, err error) {
 }
 
 // CheckKeyValidity tells if key with given value exists
-func (dbw *DBW) CheckKeyValidity(val string) (status bool, err error) {
+func (dbw *Wrapper) CheckKeyValidity(val string) (status bool, err error) {
 	if cnt, _ := dbw.Keys.Find(bson.M{"value": val}).Count(); cnt > 0 {
 		err = dbw.Keys.Remove(bson.M{"value": val})
 

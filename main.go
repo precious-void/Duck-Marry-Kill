@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -12,19 +12,19 @@ import (
 )
 
 var (
-	info, _     = mgo.ParseURL(DBURI)
-	sess, dberr = mgo.DialWithInfo(info)
-	dbase       = sess.DB(DBNAME)
-	dbwrap      = db.NewDBW(dbase)
+	info, _       = mgo.ParseURL(DBURI)
+	dbsess, dberr = mgo.DialWithInfo(info)
+	dbase         = dbsess.DB(DBNAME)
+	dbwrap        = db.NewWrapper(dbase)
 )
 
 func main() {
 	if dberr != nil {
 		panic(dberr)
 	}
-	defer sess.Close()
-	sess.SetMode(mgo.Monotonic, true)
-	fmt.Println("Connected to db")
+	defer dbsess.Close()
+	dbsess.SetMode(mgo.Monotonic, true)
+	log.Println("Connected to DB")
 
 	router := mux.NewRouter()
 	router.StrictSlash(true)
@@ -49,14 +49,14 @@ func main() {
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	srv := http.Server{
-		Addr:           port,
+		Addr:           PORT,
 		Handler:        router,
 		ReadTimeout:    5 * time.Second,
 		WriteTimeout:   7 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	fmt.Println("Listenning to", port)
+	log.Printf("Listening to %s", PORT)
 
 	err := srv.ListenAndServe()
 	if err != nil {
