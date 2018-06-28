@@ -25,7 +25,6 @@ func main() {
 	router.StrictSlash(true)
 	router.HandleFunc("/", mainHandler)
 	router.HandleFunc("/FDK", FDKHandler)
-	router.HandleFunc("/FDKStats", FDKStatsHandler)
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 	//router.NotFoundHandler = http.HandlerFunc(notFoundHandler)
 

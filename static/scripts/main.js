@@ -10,10 +10,10 @@ var gender = (((window.location.href).indexOf("gender=true")!=-1)?1:-1),
 function rotate() {
     if(gender == 1) {
         switchImg.style.transform="rotate(0deg)";
-        document.body.style.backgroundColor = "lightblue";
+        document.getElementById("nav").style.backgroundColor = "lightblue";
     } else {
         switchImg.style.transform="rotate(180deg)";
-        document.body.style.backgroundColor = "pink";
+        document.getElementById("nav").style.backgroundColor = "pink";
     }
     gender *= -1; 
 }
@@ -30,8 +30,8 @@ var text = document.getElementById("text"),
 
 var words = ["fuck", "marry", "kill"], chosen = [];
 
-var xhrGET = new XMLHttpRequest();
-xhrGET.onreadystatechange = function() {
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
         var arr = JSON.parse(this.responseText);
         for(var i=0; i<3; i++) {
@@ -43,12 +43,10 @@ xhrGET.onreadystatechange = function() {
     }
 };
 
-var xhrPOST = new XMLHttpRequest();
-
 var i = 0;
 function FDK() {
-    xhrGET.open("GET", "/FDK", false);
-    xhrGET.send();
+    xhr.open("GET", "/FDK", false);
+    xhr.send();
     text.innerText = "Choose whom you'd " + words[0];
     imgWrappers.forEach(imgWrapper => {
         imgWrapper.onclick = function() {
@@ -70,10 +68,9 @@ function FDK() {
 
 function sendFDK() {
     if(i==3) {
-        xhrPOST.open("POST", "/FDKStats");
-        xhrPOST.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        console.log(JSON.stringify({Ids: chosen}));
-        xhrPOST.send(JSON.stringify({Ids: chosen}));
+        xhr.open("POST", "/FDK");
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.send(JSON.stringify({Ids: chosen}));
         resetFDK();
         FDK();
     }

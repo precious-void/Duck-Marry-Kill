@@ -37,6 +37,11 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Data for json from front
+type Data struct {
+	Ids []string
+}
+
 // FDKHandler makes everything work
 func FDKHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
@@ -53,15 +58,7 @@ func FDKHandler(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 		fmt.Fprintf(w, string(s))
-	}
-}
-
-type Data struct {
-	Ids []string
-}
-
-func FDKStatsHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
+	} else {
 		var d Data
 		err := json.NewDecoder(r.Body).Decode(&d)
 		if err != nil {
