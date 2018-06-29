@@ -41,10 +41,10 @@ function rotate(b) {
     }
     if(getCookie("gender") == "male") {
         switchImg.style.transform="rotate(0deg)";
-        document.getElementById("nav").style.backgroundColor = "lightblue";
+        //document.getElementById("nav").style.backgroundColor = "lightblue";
     } else {
         switchImg.style.transform="rotate(180deg)";
-        document.getElementById("nav").style.backgroundColor = "pink";
+        //document.getElementById("nav").style.backgroundColor = "pink";
     }
 }
 
