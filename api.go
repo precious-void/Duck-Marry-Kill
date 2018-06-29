@@ -14,15 +14,11 @@ import (
 
 //----------------- Users ----------------\\
 
-<<<<<<< HEAD
-// TODO: change bad naming
-=======
 // Data for json from front
 type Data struct {
 	Ids []string
 }
 
->>>>>>> design
 // GetUser get girl from vk by screenname
 func getUser(screenname string) (user dbw.User, err error) {
 	cmd := exec.Command("python3", append([]string{SCRIPTSPATH + "get_girl_by_vkid.py"}, screenname)...)
