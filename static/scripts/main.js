@@ -34,7 +34,8 @@ var xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
         var arr = JSON.parse(this.responseText);
-        for(var i=0; i<3; i++) {
+        var k = (gender==1?0:3);
+        for(var i=k; i<k+3; i++) {
             var img = imgWrappers[i].childNodes[0];
             img.src = arr[i]["photo_url"];
             img.id = arr[i]["vkid"];
