@@ -90,7 +90,7 @@ function FDK(update) {
         xhr.open("GET", "/FDK", true);
         xhr.send();
     }
-    text.innerText = "Choose whom you'd " + words[0];
+    text.innerHTML= `Choose whom you'd like to <span style="color:${i==0?"red":i==1?"orange":"green"}">` + words[0];
     imgButtons.forEach(imgButton => {
         imgButton.onclick = function() {
             this.disabled = true;
@@ -105,7 +105,7 @@ function FDK(update) {
                 text.innerText = "Well done!";
                 setTimeout(sendFDK, 2000);
             } else {
-                text.innerText = "Choose whom you'd like to " + words[i];
+                text.innerHTML= `Choose whom you'd like to <span style="color:${i==0?"red":i==1?"orange":"green"}">` + words[i];
             }
         };
     });
