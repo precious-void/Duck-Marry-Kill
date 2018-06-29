@@ -17,7 +17,7 @@ type Stats struct {
 type User struct {
 	VKId     int    `bson:"vkid" json:"vkid"` // used to identify users in database
 	Name     string `bson:"name" json:"name"`
-	Sex      bool   `bson:"sex" json:"sex"`
+	Sex      bool   `bson:"sex" json:"sex"` // 0 - female, 1 - male
 	PhotoURL string `bson:"photo_url" json:"photo_url"`
 	Stats    Stats  `bson:"stats" json:"stats"`
 }
@@ -33,8 +33,10 @@ func (e *notEnoughPicsError) Error() string {
 
 // AddUser adds user to database
 // TODO: more comfortable adding
-func (dbw *Wrapper) AddUser(user User) error {
-	err := dbw.Users.Insert(user)
+func (dbw *Wrapper) AddUser(user User) (err error) {
+	if n, _ := dbw.Users.Find(user).Count(); n == 0 {
+		err = dbw.Users.Insert(user)
+	}
 	return err
 }
 

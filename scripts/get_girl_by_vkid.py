@@ -13,13 +13,14 @@ api = vk.API(sess)
 def get_girl_by_vk_screenname(screenname):
     response = api.users.get(
                          user_ids=screenname,
-                         fields=["photo_max_orig"],
+                         fields=["photo_max_orig", "sex"],
                          version="5.73")[-1]
 
     out = dict()
     out["name"] = response["first_name"] + " " + response["last_name"]
     out["photo_url"] = response["photo_max_orig"]
     out["vkid"] = response["uid"]
+    out["sex"] = bool(response["sex"] - 1) # TODO: to that secure 
 
     return json.dumps(out)    
 
