@@ -5,23 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-
-	"github.com/gorilla/sessions"
 )
-
-var (
-	key   = []byte("EF495401D79526606BC45A351DED18E661333B2013451B06153C6CB8ACB88962")
-	store *sessions.CookieStore
-)
-
-func init() {
-	store = sessions.NewCookieStore(key)
-	store.Options = &sessions.Options{
-		Path:     "/",
-		MaxAge:   86400,
-		HttpOnly: true, // TODO: delete this for https
-	}
-}
 
 // MainHandler is for main page
 func mainHandler(w http.ResponseWriter, r *http.Request) {
@@ -47,5 +31,18 @@ func FDKHandler(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 		fmt.Fprintf(w, string(s))
+	}
+}
+
+type adminPageStruct struct {
+	IsAdmin bool
+}
+
+func adminHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		template.Must(
+			template.New("template").
+				ParseGlob("templates/*")).
+			ExecuteTemplate(w, "addgirl.html", adminPageStruct{checkAdminCookie(r)})
 	}
 }

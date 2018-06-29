@@ -37,15 +37,8 @@ func (dbw *Wrapper) IsUserAdmin(uid int) (bool, error) {
 
 // GiveAdminPrivs gives admin priveleges to user with given ID
 func (dbw *Wrapper) GiveAdminPrivs(userID int, keyVal string) (err error) {
-	var key Key
-
-	if dbw.Keys.Find(bson.M{"value": keyVal}).One(&key); key.CleatorID == userID {
-		return nil
-	}
-
 	if valid, err := dbw.CheckKeyValidity(keyVal); valid {
 		err = dbw.Admins.Update(bson.M{"uid": userID}, bson.M{"$set": bson.M{"is_admin": true}})
-
 		return err
 	}
 

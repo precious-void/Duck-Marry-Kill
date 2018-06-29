@@ -15,7 +15,41 @@
         <li><a href="/admin/">Add Girl</a></li>
         <li><a href="/faq/">FAQ</a></li>
     </ul>
-    
+
+    <div style="margin:auto; width: 50%">
+        <h2 style="margin-top: 0em">Add Girl</h2>
+        <form action="/add_girl()">
+            <input type="url" id="vk_url" name="url" placeholder="VK URL..">   
+        </form>
+
+        {{if .IsAdmin}}
+        <h2>Edit Girl</h2>
+        <form action="/edit/">
+            <input type="text" size="30" placeholder="Girls Name.." onkeyup="showResult(this.value)">
+            <div id="livesearch"></div>
+        </form>
+        {{end}}
+
+        {{if not .IsAdmin}}
+        <h2>Become Admin</h2>
+        <form action="/edit/">
+            <input type="text" size="30" placeholder="Invite Key.." onkeyup="showResult(this.value)">
+            <div id="livesearch"></div>
+        </form>
+        {{end}}
+
+
+        {{if .IsAdmin}}
+        <h2>Your Invite Keys</h2>
+        <div id="invite_keys">
+            <div class="keyset">
+                <div class="key">aFdVsdKj <button style="float:right">copy</button></div>
+                <div class="key">dASdjdja</div>
+            </div>
+        </div>
+        {{end}}
+    </div>
+
     <footer> 
         <div class="text"><a href="/about/">About.</a> Все права не защищены. </div>
     </footer>

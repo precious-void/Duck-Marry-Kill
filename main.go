@@ -48,6 +48,8 @@ func main() {
 	//---------------- setup service ------------
 	router.HandleFunc("/", mainHandler)
 	router.HandleFunc("/FDK", FDKHandler)
+	router.HandleFunc("/admin", adminHandler)
+
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	srv := http.Server{

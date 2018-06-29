@@ -101,7 +101,6 @@ func UpdateUserStatsHandler(w http.ResponseWriter, r *http.Request) {
 
 func checkAdminCookie(r *http.Request) bool {
 	sess, _ := cookiestore.Get(r, SESSCODE)
-	fmt.Println(sess.Values)
 
 	if uid, ok := sess.Values["uid"]; ok {
 		if val, err := strconv.Atoi(uid.(string)); err == nil {
@@ -205,7 +204,7 @@ func GiveAdminHandler(w http.ResponseWriter, r *http.Request) {
 				if err == nil {
 					fmt.Fprintf(w, "ok")
 				} else {
-					fmt.Fprintf(w, "permission denied")
+					fmt.Fprintf(w, err.Error())
 				}
 			}
 		}
