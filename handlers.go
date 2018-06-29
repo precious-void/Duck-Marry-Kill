@@ -51,3 +51,16 @@ func FDKHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, string(s))
 	}
 }
+
+type adminPageStruct struct {
+	IsAdmin bool
+}
+
+func adminHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		template.Must(
+			template.New("template").
+				ParseGlob("templates/*")).
+			ExecuteTemplate(w, "addgirl.html", adminPageStruct{checkAdminCookie(r)})
+	}
+}

@@ -50,6 +50,8 @@ func main() {
 	router.HandleFunc("/", mainHandler)
 	router.HandleFunc("/FDK", FDKHandler)
 	router.HandleFunc("/edit/{id:[0-9]+}", editHandler)
+	router.HandleFunc("/admin", adminHandler)
+
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	srv := http.Server{
