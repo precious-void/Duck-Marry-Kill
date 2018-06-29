@@ -14,8 +14,9 @@ import (
 
 //----------------- Users ----------------\\
 
+// TODO: change bad naming
 // GetUser get girl from vk by screenname
-func GetUser(screenname string) (user dbw.User, err error) {
+func getUser(screenname string) (user dbw.User, err error) {
 	cmd := exec.Command("python3", append([]string{SCRIPTSPATH + "get_girl_by_vkid.py"}, screenname)...)
 	bytes, err := cmd.Output()
 
@@ -28,8 +29,6 @@ func GetUser(screenname string) (user dbw.User, err error) {
 
 func RandomUserHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-
-	//fmt.Print(r.Form)
 
 	if sex, ok := r.Form["sex"]; ok {
 		val, err := strconv.ParseBool(sex[0])
@@ -66,7 +65,7 @@ func AddUserHandler(w http.ResponseWriter, r *http.Request) {
 			pieces := strings.Split(url[0], "/")
 			scname := pieces[len(pieces)-1]
 
-			user, err := GetUser(scname)
+			user, err := getUser(scname)
 
 			if err == nil {
 				dbwrap.AddUser(user)
@@ -101,10 +100,24 @@ func UpdateUserStatsHandler(w http.ResponseWriter, r *http.Request) {
 
 //----------------- Keys ----------------\\
 
+func checkAdminCookie(r *http.Request) bool {
+	sess, _ := cookiestore.Get(r, SESSCODE)
+	fmt.Println(sess.Values)
+
+	if uid, ok := sess.Values["uid"]; ok {
+		if val, err := strconv.Atoi(uid.(string)); err == nil {
+			isAdmin, _ := dbwrap.IsUserAdmin(val)
+			return isAdmin
+		}
+	}
+
+	return false
+}
+
 func GenerateKeyHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
-	if creatorID, ok := r.Form["creator_id"]; ok {
+	if creatorID, ok := r.Form["creator_id"]; ok && checkAdminCookie(r) {
 		if val, err := strconv.Atoi(creatorID[0]); err == nil {
 			key, err := dbwrap.GenerateKey(val)
 
@@ -121,7 +134,7 @@ func GenerateKeyHandler(w http.ResponseWriter, r *http.Request) {
 func GetUsersKeysHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
-	if uid, ok := r.Form["uid"]; ok {
+	if uid, ok := r.Form["uid"]; ok && checkAdminCookie(r) {
 		if val, err := strconv.Atoi(uid[0]); err == nil {
 			keys, err := dbwrap.GetUsersKeys(val)
 
@@ -153,8 +166,15 @@ func CheckKeyHandler(w http.ResponseWriter, r *http.Request) {
 //----------------- Admins ----------------\\
 func CreateAdminHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
+
+	sess, _ := cookiestore.Get(r, SESSCODE)
+
 	admin := dbwrap.CreateUser()
 	b, _ := json.Marshal(admin)
+
+	sess.Values["uid"] = strconv.Itoa(admin.UID)
+	sess.Save(r, w)
+
 	fmt.Fprintf(w, string(b))
 }
 

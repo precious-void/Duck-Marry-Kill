@@ -32,7 +32,6 @@ func (e *notEnoughPicsError) Error() string {
 }
 
 // AddUser adds user to database
-// TODO: more comfortable adding
 func (dbw *Wrapper) AddUser(user User) (err error) {
 	if n, _ := dbw.Users.Find(user).Count(); n == 0 {
 		err = dbw.Users.Insert(user)

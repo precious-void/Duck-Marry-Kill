@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	"gopkg.in/mgo.v2"
 
 	db "./db"
@@ -16,6 +17,8 @@ var (
 	dbsess, dberr = mgo.DialWithInfo(info)
 	dbase         = dbsess.DB(DBNAME)
 	dbwrap        = db.NewWrapper(dbase)
+
+	cookiestore = sessions.NewCookieStore([]byte(COOKIESTOREKEY))
 )
 
 func main() {

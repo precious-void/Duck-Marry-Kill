@@ -1,4 +1,5 @@
 window.onload = function() {
+    cookie_routine()
     switchImg.style.opacity = 1;
     rotate();
     FDK();
@@ -16,6 +17,11 @@ function rotate() {
         document.body.style.backgroundColor = "pink";
     }
     gender *= -1; 
+}
+
+function cookie_routine() {
+    console.log("cookies:")
+    console.log(document.cookie)
 }
 
 // -------------------------------- FDK -------------------------------- //
