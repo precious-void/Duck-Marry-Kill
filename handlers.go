@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"strconv"
 
 	"github.com/gorilla/sessions"
 )
@@ -26,18 +25,13 @@ func init() {
 
 // MainHandler is for main page
 func mainHandler(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "FDK")
-	if err != nil {
-		panic(err)
-	}
-
-	err = template.Must(template.New("template").ParseGlob("templates/*")).ExecuteTemplate(w, "index.html", session)
+	err := template.Must(template.New("template").ParseGlob("templates/*")).ExecuteTemplate(w, "index.html", nil)
 	if err != nil {
 		panic(err)
 	}
 }
 
-// FDKHandler makes everything work
+// FDKHandler get and post actions from front
 func FDKHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		men, err := dbwrap.GetRandomUsers(3, true)
@@ -53,26 +47,5 @@ func FDKHandler(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 		fmt.Fprintf(w, string(s))
-	}
-}
-
-type Data struct {
-	Ids []string
-}
-
-func FDKStatsHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		var d Data
-		err := json.NewDecoder(r.Body).Decode(&d)
-		if err != nil {
-			panic(err)
-		}
-		var ids = []int{}
-
-		for _, i := range d.Ids {
-			j, _ := strconv.Atoi(i)
-			ids = append(ids, j)
-		}
-		dbwrap.UpdateUserStats(ids)
 	}
 }
