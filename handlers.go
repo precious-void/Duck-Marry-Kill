@@ -5,27 +5,29 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-
-	"github.com/gorilla/sessions"
+	"strconv"
+	"strings"
 )
-
-var (
-	key   = []byte("EF495401D79526606BC45A351DED18E661333B2013451B06153C6CB8ACB88962")
-	store *sessions.CookieStore
-)
-
-func init() {
-	store = sessions.NewCookieStore(key)
-	store.Options = &sessions.Options{
-		Path:     "/",
-		MaxAge:   86400,
-		HttpOnly: true, // TODO: delete this for https
-	}
-}
 
 // MainHandler is for main page
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	err := template.Must(template.New("template").ParseGlob("templates/*")).ExecuteTemplate(w, "index.html", nil)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func editHandler(w http.ResponseWriter, r *http.Request) {
+	parsed := strings.Split(r.URL.Path, "/")
+	id, err := strconv.Atoi(parsed[len(parsed)-1])
+	if err != nil {
+		panic(err)
+	}
+	user, err := dbwrap.GetUserByVKID(id)
+	if err != nil {
+		panic(err)
+	}
+	err = template.Must(template.New("template").ParseGlob("templates/*")).ExecuteTemplate(w, "edit.html", user)
 	if err != nil {
 		panic(err)
 	}

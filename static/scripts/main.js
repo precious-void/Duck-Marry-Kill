@@ -1,69 +1,27 @@
 window.onload = function() {
     if(getCookie("gender")==null) {
-        setCookie("gender", "female", 30);
+        setCookie("gender", "female", 7);
     }
-    console.log(getCookie("gender"));
 
     switchImg.style.opacity = 1;
     rotate(false);
     FDK(true);
 }
 
-function setCookie(name,value,days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-}
-
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-}
-
-var switchImg = document.getElementById("switchImg"), gender = document.cookie["gender"];
-
-function rotate(b) {
-    if(b) {
-        var gender = getCookie("gender");
-        setCookie("gender", (gender=="male"?"female":"male"), 30);
-        setGenderImg(arr, gender);
-        resetFDK(false);
-    }
-    if(getCookie("gender") == "male") {
-        switchImg.style.transform="rotate(0deg)";
-        //document.getElementById("nav").style.backgroundColor = "lightblue";
-    } else {
-        switchImg.style.transform="rotate(180deg)";
-        //document.getElementById("nav").style.backgroundColor = "pink";
-    }
-}
-
-function cookie_routine() {
-    console.log("cookies:")
-    console.log(document.cookie)
-}
-
-// -------------------------------- FDK -------------------------------- //
+// -------------------------------- Variables -------------------------------- //
 
 var imgButton1 = document.getElementById("imgButton1"),
     imgButton2 = document.getElementById("imgButton2"),
     imgButton3 = document.getElementById("imgButton3"),
     imgButtons = [imgButton1, imgButton2, imgButton3];    
 
-var text = document.getElementById("text"),
+var text     = document.getElementById("text"),
     imgTexts = document.getElementsByClassName("imgText");
 
-var words = ["fuck", "marry", "kill"], chosen = [];
+var switchImg = document.getElementById("switchImg"), 
+    gender    = document.cookie["gender"],
+    words     = ["fuck", "marry", "kill"], 
+    chosen    = [];
 
 var xhr = new XMLHttpRequest();
 var arr = [];
@@ -74,15 +32,8 @@ xhr.onreadystatechange = function() {
     }
 };
 
-function setGenderImg(data, gender) {
-    var k = (getCookie("gender")    =="male"?0:3);
-    for(var i=k; i<k+3; i++) {
-        var img = imgButtons[i-k].childNodes[0];
-        img.src = data[i]["photo_url"];
-        img.id = data[i]["vkid"];
-        imgTexts.item(i-k).innerText = data[i]["name"];
-    }
-}
+
+/* -------------------------------- FDK -------------------------------- */
 
 var i = 0;
 function FDK(update) {
@@ -129,7 +80,54 @@ function resetFDK(update) {
     });
     i = 0;
     chosen = [];
-    if(update) {
-        FDK(true);
+    FDK(update)
+}
+
+/* ------------------------------ Functions ------------------------------ */
+
+function setGenderImg(data) {
+    var k = (getCookie("gender")=="male"?0:3);
+    for(var i=k; i<k+3; i++) {
+        var img = imgButtons[i-k].childNodes[0];
+        img.src = data[i]["photo_url"];
+        img.id = data[i]["vkid"];
+        imgTexts.item(i-k).innerText = data[i]["name"];
     }
+}
+
+function rotate(b) {
+    if(b) {
+        var gender = getCookie("gender");
+        setCookie("gender", (gender=="male"?"female":"male"), 7);
+        setGenderImg(arr);
+        resetFDK(false);
+    }
+    if(getCookie("gender") == "male") {
+        switchImg.style.transform="rotate(0deg)";
+    } else {
+        switchImg.style.transform="rotate(180deg)";
+    }
+}
+
+/* ------------------------------ Cookies ------------------------------ */
+
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
 }

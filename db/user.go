@@ -15,7 +15,7 @@ type Stats struct {
 
 // User - basically stores user information
 type User struct {
-	VKId     int    `bson:"vkid" json:"vkid"` // used to identify users in database
+	VKID     int    `bson:"vkid" json:"vkid"` // used to identify users in database
 	Name     string `bson:"name" json:"name"`
 	Sex      bool   `bson:"sex" json:"sex"` // 0 - female, 1 - male
 	PhotoURL string `bson:"photo_url" json:"photo_url"`
@@ -57,4 +57,24 @@ func (dbw *Wrapper) UpdateUserStats(vkids []int) {
 	dbw.Users.Update(bson.M{"vkid": vkids[0]}, bson.M{"$inc": bson.M{"stats.fucks": 1}})
 	dbw.Users.Update(bson.M{"vkid": vkids[1]}, bson.M{"$inc": bson.M{"stats.marrys": 1}})
 	dbw.Users.Update(bson.M{"vkid": vkids[2]}, bson.M{"$inc": bson.M{"stats.kills": 1}})
+}
+
+func (dbw *Wrapper) GetUserByVKID(vkid int) (user User, err error) {
+	err = dbw.Users.Find(bson.M{"vkid": vkid}).One(&user)
+	return
+}
+
+func (dbw *Wrapper) UpdateUserInfo(vkid int, name string, sex bool, photo_url string) {
+	err := dbw.Users.Update(bson.M{"vkid": vkid}, bson.M{"$set": bson.M{"name": name}})
+	if err != nil {
+		panic(err)
+	}
+	err = dbw.Users.Update(bson.M{"vkid": vkid}, bson.M{"$set": bson.M{"sex": sex}})
+	if err != nil {
+		panic(err)
+	}
+	err = dbw.Users.Update(bson.M{"vkid": vkid}, bson.M{"$set": bson.M{"photo_url": photo_url}})
+	if err != nil {
+		panic(err)
+	}
 }

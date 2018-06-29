@@ -97,6 +97,25 @@ func UpdateUserStatsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func UpdateUserInfoHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		vkid, _ := strconv.Atoi(r.FormValue("vkid"))
+		name := r.FormValue("name")
+		gender := r.FormValue("sex")
+		photo_url := r.FormValue("photo_url")
+
+		var sex bool
+		if gender == "male" {
+			sex = true
+		} else {
+			sex = false
+		}
+
+		dbwrap.UpdateUserInfo(vkid, name, sex, photo_url)
+		http.Redirect(w, r, "/", 302)
+	}
+}
+
 //----------------- Keys ----------------\\
 
 func checkAdminCookie(r *http.Request) bool {

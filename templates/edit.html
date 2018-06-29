@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>FDK</title>
+</head>
+<body>
+    <a href="/"><img src="../static/img/logo.svg" id="logo"></a>
+    <ul class="nav" id="nav">
+        <li><a href="/ratings/">Rating</a></li>
+        <li><a href="/admin/">Add Girl</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+    </ul>
+    <div class="editWrapper">
+        <div class="form" align="center">
+            <form action="/api/users/update_info" method="POST">
+                    <div class="field">
+                        <input type="text" name="name" id="name" value="{{.Name}}">
+                        <label for="name">Name</label>
+                    </div>
+                    <div class="field">
+                        <select name="sex" id="gender">
+                            {{if .Sex}}
+                            <option value="male" selected>Male</option>
+                            <option value="female">Female</option>
+                            {{else}}
+                            <option value="male">Male</option>
+                            <option value="female" selected>Female</option>
+                            {{end}}
+                        </select>
+                        <label for="gender">Gender</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" name="photo_url" id="photo_url" value="{{.PhotoURL}}">
+                        <label for="photo_url">Photo url</label>
+                    </div>
+                    <input type="hidden" name="vkid" value="{{.VKID}}">
+                    <div class="submit">
+                        <label>Save<input type="submit"></label>
+                    </div>
+            </form>
+        </div>
+    </div>
+    <footer> 
+        <div class="text"><a href="/about/">About.</a> Все права не защищены. </div>
+    </footer>
+</body>
+<script src="../static/scripts/main.js"></script>
+<script src="../static/scripts/script.js"></script>
+</html>

@@ -34,7 +34,6 @@ button {
     padding: 3vh 0;
     font-weight: bold;
     border-bottom: 6px solid rgba(0,0,0,0.1);
-    margin-bottom: 1.5em;
 }
 
 .nav li a {
@@ -83,27 +82,26 @@ button {
 
 /*--------------------------------- Main ---------------------------------*/
 
-.wrapper {
-    width: 100vw;
-    height: 93vh;
+.indexWrapper {
+    width: 100vw;   
     margin: auto 0;
 }
 
-.wrapper ul {
+.indexWrapper ul {
     display: flex;
     flex-direction: row;
     height: 50vh;
     padding-top: 2vh;
 }
 
-.wrapper ul li {
+.indexWrapper ul li {
     display: flex;
     flex-direction: column;
     width: calc(100%/3);
     height: 100%;
 }
 
-.wrapper .imgButton {
+.indexWrapper .imgButton {
     width: 66%;
     margin: auto;
     overflow: hidden;
@@ -112,29 +110,29 @@ button {
     transition: all .5s ease;
 }
 
-.wrapper .imgButton img {
+.indexWrapper .imgButton img {
     display: block;
     width: 100%; 
 }
 
-.wrapper .imgButton.fuck {
+.indexWrapper .imgButton.fuck {
     border: 6px solid rgb(211, 69, 69);
 }
-.wrapper .imgButton.marry {
+.indexWrapper .imgButton.marry {
     border: 6px solid orange;
 }
-.wrapper .imgButton.kill {
+.indexWrapper .imgButton.kill {
     border: 6px solid green;
 }
 
-.wrapper .imgText {
+.indexWrapper .imgText {
     display: block;
     font-size: 1.2em;
     margin: 0 auto;
     /*margin-top: 2%;*/
 }
 
-.wrapper .control {
+.indexWrapper .control {
     display: flex;
     margin-top: 15vh;
     flex-direction: column;
@@ -142,16 +140,65 @@ button {
     width: 100vw;
 }
 
-.wrapper .text {
+.indexWrapper .text {
     font-size: 1.5em;
 }
 
-.wrapper button {
+.indexWrapper button {
     font-size: 1.2em;
     background: none;
     color: green;
 }
 
+/* ------------------------------------- Edit ------------------------------------- */
+
+.editWrapper {
+    max-width: 40%;
+    margin: 0 auto;
+}
+
+.editWrapper input[type="submit"] {
+    display: none;
+}
+
+.editWrapper .submit label {
+    display: block;
+    border: 0;
+    text-decoration: none;
+    outline: none;
+    text-align: center;
+    width: 100%;
+    margin-top: 5%;
+}
+
+.editWrapper .submit label:hover {
+    background: rgb(144, 165, 185);
+}
+
+.editWrapper .field {
+    display: flex;
+    flex-flow: column-reverse;
+    padding: 1% 0; 
+    padding-top: 25px;
+}
+
+.editWrapper label, .editWrapper input {
+    padding-left: 5px;
+}
+  
+.editWrapper input {
+    padding: 0.2em 0.5em;
+    font-size: 0.8em;
+    font-weight: lighter;
+    border: none;
+    outline: 0;
+    background: lightgray;
+    text-overflow: ellipsis;
+}
+  
+.editWrapper label {
+    text-transform: uppercase;
+}
 
 /* ------------------------------------- Footer ------------------------------------- */
 
