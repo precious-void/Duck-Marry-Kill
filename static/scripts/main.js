@@ -1,18 +1,45 @@
 window.onload = function() {
+    if(getCookie("gender")==null) {
+        setCookie("gender", "female", 30);
+    }
+    console.log(getCookie("gender"));
+
     switchImg.style.opacity = 1;
     rotate(false);
     FDK(true);
 }
 
-var switchImg = document.getElementById("switchImg"), gender = 0;
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+var switchImg = document.getElementById("switchImg"), gender = document.cookie["gender"];
 
 function rotate(b) {
     if(b) {
-        gender *= -1;
-        setGenderImg(arr);
+        var gender = getCookie("gender");
+        setCookie("gender", (gender=="male"?"female":"male"), 30);
+        setGenderImg(arr, gender);
         resetFDK(false);
     }
-    if(gender == 1) {
+    if(getCookie("gender") == "male") {
         switchImg.style.transform="rotate(0deg)";
         document.getElementById("nav").style.backgroundColor = "lightblue";
     } else {
@@ -42,8 +69,8 @@ xhr.onreadystatechange = function() {
     }
 };
 
-function setGenderImg(data) {
-    var k = (gender==1?0:3);
+function setGenderImg(data, gender) {
+    var k = (getCookie("gender")    =="male"?0:3);
     for(var i=k; i<k+3; i++) {
         var img = imgButtons[i-k].childNodes[0];
         img.src = data[i]["photo_url"];
@@ -67,7 +94,7 @@ function FDK(update) {
 
             var j = parseInt(this.id.slice(-1)[0])-1;
             var name = imgTexts[j].innerText;
-            imgTexts.item(j).innerText = "You chose to " + words[i] + " " + name;
+            imgTexts.item(j).innerHTML = `You chose to <span style="color:${i==0?"red":i==1?"orange":"green"}">` + words[i] + "</span> " + name;
 
             if(++i==3) {
                 text.innerText = "Well done!";
