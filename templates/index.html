@@ -9,8 +9,8 @@
 </head>
 <body>
     <a href="/"><img src="../static/img/logo.svg" id="logo"></a>
-    <button id="switch" type="button" onclick="rotate();"><img src="../static/img/switch.png" id="switchImg"></button>
-    <ul class="nav">
+    <button id="switch" type="button" onclick="rotate(true);"><img src="../static/img/switch.png" id="switchImg"></button>
+    <ul class="nav" id="nav">
         <li><a href="/ratings/">Rating</a></li>
         <li><a href="/admin/">Add Girl</a></li>
         <li><a href="/faq/">FAQ</a></li>
@@ -18,25 +18,25 @@
     <div class="wrapper">
         <ul>
             <li>
-                <button type="button" class="imgWrapper" id="imgWrapper1"><img></button>
+                <button type="button" class="imgButton" id="imgButton1"><img></button>
                 <div class="imgText"></div>
             </li>
             <li>
-                <button type="button" class="imgWrapper" id="imgWrapper2"><img></button>
+                <button type="button" class="imgButton" id="imgButton2"><img></button>
                 <div class="imgText"></div>
             </li>
             <li>
-                <button type="button" class="imgWrapper" id="imgWrapper3"><img></button>
+                <button type="button" class="imgButton" id="imgButton3"><img></button>
                 <div class="imgText"></div>
             </li>
         </ul>
         <div class="control">
             <div class="text" id="text"></div>
-            <button type="button" onclick="resetFDK();">Reset</button>
+            <button type="button" onclick="resetFDK(false);">Reset</button>
         </div>
     </div>
     <footer> 
-        <div class="text">FDK. Все права не защищены</div>
+        <div class="text"><a href="/about/">About.</a> Все права не защищены. </div>
     </footer>
 </body>
 <script src="../static/scripts/main.js"></script>

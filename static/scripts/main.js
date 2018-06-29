@@ -1,22 +1,51 @@
 window.onload = function() {
-    cookie_routine()
+    if(getCookie("gender")==null) {
+        setCookie("gender", "female", 30);
+    }
+    console.log(getCookie("gender"));
+
     switchImg.style.opacity = 1;
-    rotate();
-    FDK();
+    rotate(false);
+    FDK(true);
 }
 
-var gender = (((window.location.href).indexOf("gender=true")!=-1)?1:-1),
-    switchImg = document.getElementById("switchImg");
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
 
-function rotate() {
-    if(gender == 1) {
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+var switchImg = document.getElementById("switchImg"), gender = document.cookie["gender"];
+
+function rotate(b) {
+    if(b) {
+        var gender = getCookie("gender");
+        setCookie("gender", (gender=="male"?"female":"male"), 30);
+        setGenderImg(arr, gender);
+        resetFDK(false);
+    }
+    if(getCookie("gender") == "male") {
         switchImg.style.transform="rotate(0deg)";
-        document.body.style.backgroundColor = "lightblue";
+        document.getElementById("nav").style.backgroundColor = "lightblue";
     } else {
         switchImg.style.transform="rotate(180deg)";
-        document.body.style.backgroundColor = "pink";
+        document.getElementById("nav").style.backgroundColor = "pink";
     }
-    gender *= -1; 
 }
 
 function cookie_routine() {
@@ -26,44 +55,52 @@ function cookie_routine() {
 
 // -------------------------------- FDK -------------------------------- //
 
-var imgWrapper1 = document.getElementById("imgWrapper1"),
-    imgWrapper2 = document.getElementById("imgWrapper2"),
-    imgWrapper3 = document.getElementById("imgWrapper3"),
-    imgWrappers = [imgWrapper1, imgWrapper2, imgWrapper3];    
+var imgButton1 = document.getElementById("imgButton1"),
+    imgButton2 = document.getElementById("imgButton2"),
+    imgButton3 = document.getElementById("imgButton3"),
+    imgButtons = [imgButton1, imgButton2, imgButton3];    
 
 var text = document.getElementById("text"),
     imgTexts = document.getElementsByClassName("imgText");
 
 var words = ["fuck", "marry", "kill"], chosen = [];
 
-var xhrGET = new XMLHttpRequest();
-xhrGET.onreadystatechange = function() {
+var xhr = new XMLHttpRequest();
+var arr = [];
+xhr.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-        var arr = JSON.parse(this.responseText);
-        for(var i=0; i<3; i++) {
-            var img = imgWrappers[i].childNodes[0];
-            img.src = arr[i]["photo_url"];
-            img.id = arr[i]["vkid"];
-            imgTexts[i].innerText = arr[i]["name"];
-        }
+        arr = JSON.parse(this.responseText);
+        setGenderImg(arr);
     }
 };
 
-var xhrPOST = new XMLHttpRequest();
+function setGenderImg(data, gender) {
+    var k = (getCookie("gender")    =="male"?0:3);
+    for(var i=k; i<k+3; i++) {
+        var img = imgButtons[i-k].childNodes[0];
+        img.src = data[i]["photo_url"];
+        img.id = data[i]["vkid"];
+        imgTexts.item(i-k).innerText = data[i]["name"];
+    }
+}
 
 var i = 0;
-function FDK() {
-    xhrGET.open("GET", "/FDK", false);
-    xhrGET.send();
+function FDK(update) {
+    if(update) {
+        xhr.open("GET", "/FDK", true);
+        xhr.send();
+    }
     text.innerText = "Choose whom you'd " + words[0];
-    imgWrappers.forEach(imgWrapper => {
-        imgWrapper.onclick = function() {
-            var name = imgTexts[i].innerText;
-            chosen.push(this.childNodes[0].id);
-            console.log(chosen);
-            this.classList.add(words[i]);
+    imgButtons.forEach(imgButton => {
+        imgButton.onclick = function() {
             this.disabled = true;
-            imgTexts[parseInt(this.id.slice(-1)[0])-1].innerText = "You chose to " + words[i] + " " + name;
+            this.classList.add(words[i]);
+            chosen.push(this.childNodes[0].id);
+
+            var j = parseInt(this.id.slice(-1)[0])-1;
+            var name = imgTexts[j].innerText;
+            imgTexts.item(j).innerHTML = `You chose to <span style="color:${i==0?"red":i==1?"orange":"green"}">` + words[i] + "</span> " + name;
+
             if(++i==3) {
                 text.innerText = "Well done!";
                 setTimeout(sendFDK, 2000);
@@ -76,23 +113,23 @@ function FDK() {
 
 function sendFDK() {
     if(i==3) {
-        xhrPOST.open("POST", "/FDKStats");
-        xhrPOST.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        console.log(JSON.stringify({Ids: chosen}));
-        xhrPOST.send(JSON.stringify({Ids: chosen}));
-        resetFDK();
-        FDK();
+        xhr.open("POST", "/api/users/update_stats");
+        xhr.send(JSON.stringify({Ids: chosen}));
+        resetFDK(true);
     }
 }
 
-function resetFDK() {
+function resetFDK(update) {
     var j = 0;
-    imgWrappers.forEach(imgWrapper => {
-        imgWrapper.className = "imgWrapper";
-        imgWrapper.disabled = false;
-        var str = imgTexts[j].innerText;
-        imgTexts[j++].innerText = str.split(" ").slice(-1)[0];
+    imgButtons.forEach(imgButton => {
+        imgButton.className = "imgButton";
+        imgButton.disabled = false;
+        var str = imgTexts[j].innerText.split(" "), len = str.length;
+        imgTexts[j++].innerText = str[len-2] + ' ' + str[len-1];
     });
     i = 0;
     chosen = [];
+    if(update) {
+        FDK(true);
+    }
 }

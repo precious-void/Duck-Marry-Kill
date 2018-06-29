@@ -48,6 +48,7 @@ func (dbw *Wrapper) DeleteUser(vkid int) error {
 func (dbw *Wrapper) GetRandomUsers(size int, sex bool) (users []User, err error) {
 	pipe := dbw.Users.Pipe([]bson.M{{"$match": bson.M{"sex": sex}}, {"$sample": bson.M{"size": size}}})
 	err = pipe.All(&users)
+	fmt.Println()
 
 	return users, err
 }

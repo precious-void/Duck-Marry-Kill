@@ -14,7 +14,15 @@ import (
 
 //----------------- Users ----------------\\
 
+<<<<<<< HEAD
 // TODO: change bad naming
+=======
+// Data for json from front
+type Data struct {
+	Ids []string
+}
+
+>>>>>>> design
 // GetUser get girl from vk by screenname
 func getUser(screenname string) (user dbw.User, err error) {
 	cmd := exec.Command("python3", append([]string{SCRIPTSPATH + "get_girl_by_vkid.py"}, screenname)...)
@@ -73,28 +81,23 @@ func AddUserHandler(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 		}
-
 	}
 }
 
 func UpdateUserStatsHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		r.ParseForm()
-
-		if vkids, ok := r.Form["vkid"]; ok {
-			if len(vkids) == 3 {
-				var users []int
-
-				for _, user := range vkids {
-					vkid, err := strconv.Atoi(user)
-
-					if err == nil {
-						users = append(users, vkid)
-					}
-				}
-				dbwrap.UpdateUserStats(users)
-			}
+	if r.Method == "POST" {
+		var d Data
+		err := json.NewDecoder(r.Body).Decode(&d)
+		if err != nil {
+			panic(err)
 		}
+		var ids = []int{}
+		for _, s := range d.Ids {
+			i, _ := strconv.Atoi(s)
+			ids = append(ids, i)
+		}
+		dbwrap.UpdateUserStats(ids)
+		log.Println(ids)
 	}
 }
 
