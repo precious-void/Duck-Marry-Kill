@@ -83,3 +83,16 @@ func (dbw *Wrapper) UpdateUserInfo(vkid int, name string, sex bool, photo_url st
 		panic(err)
 	}
 }
+
+func (dbw *Wrapper) GetTopRatedUsers(sex bool, stat string) (users []User, err error) {
+	var sortBy = []string{"-stats." + stat}
+	if stat == "fuck" {
+		sortBy = append(sortBy, "-stats."+"marrys")
+	} else if stat == "marry" {
+		sortBy = append(sortBy, "-stats."+"fucks")
+	} else {
+		sortBy = []string{"-stats.kills"}
+	}
+	err = dbw.Users.Find(bson.M{"sex": sex}).Sort(sortBy...).Limit(10).All(&users)
+	return
+}

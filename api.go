@@ -14,9 +14,15 @@ import (
 
 //----------------- Users ----------------\\
 
-// Data for json from front
+// Data for json from front(index)
 type Data struct {
 	Ids []string
+}
+
+// Rating for json from front(rating)
+type Rating struct {
+	Sex  string
+	Stat string
 }
 
 // GetUser get girl from vk by screenname
@@ -138,6 +144,31 @@ func GetUserByHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprintf(w, err.Error())
 		}
+	}
+}
+
+func UsersRatingHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		var d Rating
+		err := json.NewDecoder(r.Body).Decode(&d)
+		if err != nil {
+			panic(err)
+		}
+		var sex bool
+		if d.Sex == "male" {
+			sex = true
+		} else {
+			sex = false
+		}
+		users, err := dbwrap.GetTopRatedUsers(sex, d.Stat)
+		if err != nil {
+			panic(err)
+		}
+		s, err := json.Marshal(users)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Fprintf(w, string(s))
 	}
 }
 
