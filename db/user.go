@@ -59,6 +59,11 @@ func (dbw *Wrapper) UpdateUserStats(vkids []int) {
 	dbw.Users.Update(bson.M{"vkid": vkids[2]}, bson.M{"$inc": bson.M{"stats.kills": 1}})
 }
 
+func (dbw *Wrapper) GetUserByName(name string) (user User, err error) {
+	err = dbw.Users.Find(bson.M{"name": name}).One(&user)
+	return user, err
+}
+
 func (dbw *Wrapper) GetUserByVKID(vkid int) (user User, err error) {
 	err = dbw.Users.Find(bson.M{"vkid": vkid}).One(&user)
 	return

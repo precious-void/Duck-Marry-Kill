@@ -34,6 +34,7 @@ func main() {
 
 	//---------------- setup api ----------------
 	router.HandleFunc("/api/users/get", RandomUserHandler)
+	router.HandleFunc("/api/users/getby", GetUserByHandler)
 	router.HandleFunc("/api/users/add", AddUserHandler)
 	router.HandleFunc("/api/users/update_stats", UpdateUserStatsHandler)
 	router.HandleFunc("/api/users/update_info", UpdateUserInfoHandler)

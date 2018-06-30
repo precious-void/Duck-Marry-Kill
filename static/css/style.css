@@ -38,6 +38,7 @@ h2 {
     padding: 3vh 0;
     font-weight: bold;
     border-bottom: 6px solid rgba(0,0,0,0.1);
+    margin-bottom: 1.5em;
 }
 
 .nav li a {
@@ -236,7 +237,7 @@ input, select {
 
 input[type=submit] {
     width: 100%;
-    background-color: #4CAF50;
+    background-color: lightblue;
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
@@ -246,7 +247,7 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-    background-color: #45a049;
+    background-color: darkcyan;
 }
 
 .keyset {

@@ -24,8 +24,9 @@
 
         {{if .IsAdmin}}
         <h2>Edit Girl</h2>
-        <form action="/edit/">
-            <input type="text" size="30" placeholder="Girls Name.." onkeyup="showResult(this.value)">
+        <form action="javascript:void(0); "onsubmit="OnSearch();">
+            <input type="text" size="30" id="username" placeholder="Girls Name..">
+            <input type="submit">
             <div id="livesearch"></div>
         </form>
         {{end}}
@@ -54,6 +55,7 @@
         <div class="text"><a href="/about/">About.</a> Все права не защищены. </div>
     </footer>
 </body>
-<script src="../static/scripts/main.js"></script>
-<script src="../static/scripts/script.js"></script>
+<script src="../static/scripts/api.js"></script>
+<script src="../static/scripts/admin.js"></script>
+
 </html>

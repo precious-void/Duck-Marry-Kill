@@ -116,6 +116,26 @@ func UpdateUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GetUserByHandler(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var request struct {
+		Name string `json:"name"`
+	}
+
+	err := decoder.Decode(&request)
+
+	if err == nil && request.Name != "" {
+		user, err := dbwrap.GetUserByName(request.Name)
+		fmt.Println(user)
+		if err == nil {
+			b, _ := json.Marshal(user)
+			fmt.Fprintf(w, string(b))
+		} else {
+			fmt.Fprintf(w, err.Error())
+		}
+	}
+}
+
 //----------------- Keys ----------------\\
 
 func checkAdminCookie(r *http.Request) bool {
