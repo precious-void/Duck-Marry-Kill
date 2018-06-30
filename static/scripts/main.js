@@ -1,9 +1,28 @@
 window.onload = function() {
+    imgButtons.forEach(imgButton => {
+        imgButton.onclick = function() {
+            this.disabled = true;
+            this.classList.add(words[i]);
+            chosen.push(this.childNodes[0].id);
+
+            var j = parseInt(this.id.slice(-1)[0])-1;
+            var name = imgTexts[j].innerText;
+            imgTexts.item(j).innerHTML = `You chose to <span style="color:${i==0?"red":i==1?"orange":"green"}">` + words[i] + "</span> " + name;
+
+            if(++i==3) {
+                text.innerText = "Well done!";
+                setTimeout(sendFDK, 2000);
+            } else {
+                text.innerHTML= `Choose whom you'd like to <span style="color:${i==0?"red":i==1?"orange":"green"}">` + words[i];
+            }
+        };
+    });
+
     if(getCookie("gender")==null) {
         setCookie("gender", "female", 7);
     }
-
-    switchImg.style.opacity = 1;
+    
+    setTimeout("switchImg.style.opacity = 1;", 500);
     rotate(false);
     FDK(true);
 }
@@ -19,8 +38,8 @@ var text     = document.getElementById("text"),
     imgTexts = document.getElementsByClassName("imgText");
 
 var switchImg = document.getElementById("switchImg"), 
-    gender    = document.cookie["gender"],
     words     = ["fuck", "marry", "kill"], 
+    gender    = getCookie("gender"),
     chosen    = [];
 
 var xhr = new XMLHttpRequest();
@@ -42,24 +61,6 @@ function FDK(update) {
         xhr.send();
     }
     text.innerHTML= `Choose whom you'd like to <span style="color:${i==0?"red":i==1?"orange":"green"}">` + words[0];
-    imgButtons.forEach(imgButton => {
-        imgButton.onclick = function() {
-            this.disabled = true;
-            this.classList.add(words[i]);
-            chosen.push(this.childNodes[0].id);
-
-            var j = parseInt(this.id.slice(-1)[0])-1;
-            var name = imgTexts[j].innerText;
-            imgTexts.item(j).innerHTML = `You chose to <span style="color:${i==0?"red":i==1?"orange":"green"}">` + words[i] + "</span> " + name;
-
-            if(++i==3) {
-                text.innerText = "Well done!";
-                setTimeout(sendFDK, 2000);
-            } else {
-                text.innerHTML= `Choose whom you'd like to <span style="color:${i==0?"red":i==1?"orange":"green"}">` + words[i];
-            }
-        };
-    });
 }
 
 function sendFDK() {

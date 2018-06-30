@@ -64,3 +64,10 @@ func adminHandler(w http.ResponseWriter, r *http.Request) {
 			ExecuteTemplate(w, "addgirl.html", adminPageStruct{checkAdminCookie(r)})
 	}
 }
+
+func ratingHandler(w http.ResponseWriter, r *http.Request) {
+	err := template.Must(template.New("template").ParseGlob("templates/*")).ExecuteTemplate(w, "rating.html", nil)
+	if err != nil {
+		panic(err)
+	}
+}

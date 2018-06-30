@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>FDK</title>
+</head>
+<body>
+    <a href="/"><img src="../static/img/logo.svg" id="logo"></a>
+    <button id="switch" type="button" onclick="switchGender(true);"><img style="overflow:hidden" src="../static/img/switch.png" id="switchImg"></button>
+    <ul class="nav" id="nav">
+        <li><a href="/rating/">Rating</a></li>
+        <li><a href="/admin/">Add Girl</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+    </ul>
+    <form class="statsForm">
+        <label>Fuck<input class="radioRating" type="radio" name="stat" value="fuck" checked></label>
+        <label>Marry<input class="radioRating" type="radio" name="stat" value="marry"></label>
+        <label>Kill<input class="radioRating" type="radio" name="stat" value="kill"></label>
+    </form>
+    <div class="ratingWrapper" id="ratingWrapper"></div>
+    <footer> 
+        <div class="text"><a href="/about/">About.</a> Все права не защищены. </div>
+    </footer>
+</body>
+<script src="../static/scripts/rating.js"></script>
+</html>

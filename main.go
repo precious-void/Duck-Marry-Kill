@@ -38,6 +38,7 @@ func main() {
 	router.HandleFunc("/api/users/add", AddUserHandler)
 	router.HandleFunc("/api/users/update_stats", UpdateUserStatsHandler)
 	router.HandleFunc("/api/users/update_info", UpdateUserInfoHandler)
+	router.HandleFunc("/api/users/rating", UsersRatingHandler)
 
 	router.HandleFunc("/api/keys/generate", GenerateKeyHandler)
 	router.HandleFunc("/api/keys/get", GetUsersKeysHandler)
@@ -50,6 +51,7 @@ func main() {
 	//---------------- setup service ------------
 	router.HandleFunc("/", mainHandler)
 	router.HandleFunc("/FDK", FDKHandler)
+	router.HandleFunc("/rating", ratingHandler)
 	router.HandleFunc("/edit/{id:[0-9]+}", editHandler)
 	router.HandleFunc("/admin", adminHandler)
 
