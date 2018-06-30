@@ -10,7 +10,6 @@
 html {
     min-height: 100vh;
     min-width: 100vw;
-    overflow: hidden;
 }
 
 body {
@@ -208,7 +207,7 @@ h2 {
 /* ------------------------------------- Footer ------------------------------------- */
 
 footer {
-    position: absolute;
+    position: relative;
     bottom: 0;
     width: 100%;
 }

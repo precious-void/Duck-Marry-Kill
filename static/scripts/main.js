@@ -3,6 +3,15 @@ window.onload = function() {
         setCookie("gender", "female", 7);
     }
 
+    if(getCookie("_fbYshmsWE0iF73tD")==null){
+        $.when(newUser()).done(
+            function (sess) {
+                console.log(`Creating new user uid=${sess.uid}`);
+                setCookie("uid", sess.uid, 30);
+            }
+        )
+    }
+
     switchImg.style.opacity = 1;
     rotate(false);
     FDK(true);

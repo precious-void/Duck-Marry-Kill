@@ -31,3 +31,76 @@ function addUser(url) {
         }
     })
 }
+
+function newUser() {
+    return $.ajax
+    ({
+        type: "GET",
+        url: '/api/admins/create',
+        dataType: 'json',
+        async: true,
+        success: function (data) {
+            return data
+        },
+        error: function() {
+            return null
+        }
+    })
+}
+
+function generateInviteKey() {
+    var uid = getCookie("uid")
+
+    return $.ajax
+    ({
+        type: "POST",
+        url: '/api/keys/generate',
+        dataType: 'json',
+        async: true,
+        data: JSON.stringify({creator_id: uid}),
+        success: function (data) {
+            return data
+        },
+        error: function() {
+            return null
+        }
+    })
+}
+
+function getSessInviteKeys() {
+    var uid = getCookie("uid")
+
+    return $.ajax
+    ({
+        type: "POST",
+        url: '/api/keys/get',
+        dataType: 'json',
+        async: true,
+        data: JSON.stringify({uid: uid}),
+        success: function (data) {
+            return data
+        },
+        error: function() {
+            return null
+        }
+    })
+}
+
+function becomeAdmin(key) {
+    var uid = getCookie("uid")
+
+    return $.ajax
+    ({
+        type: "POST",
+        url: '/api/admins/give',
+        dataType: 'json',
+        async: true,
+        data: JSON.stringify({uid: uid, key: key}),
+        success: function (data) {
+            return data
+        },
+        error: function() {
+            return null
+        }
+    })
+}

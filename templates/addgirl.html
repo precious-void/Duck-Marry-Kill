@@ -9,7 +9,6 @@
 </head>
 <body>
     <a href="/"><img src="../static/img/logo.svg" id="logo"></a>
-    <button id="switch" type="button" onclick="rotate(true);"><img src="../static/img/switch.png" id="switchImg"></button>
     <ul class="nav" id="nav">
         <li><a href="/ratings/">Rating</a></li>
         <li><a href="/admin/">Add Girl</a></li>
@@ -34,8 +33,9 @@
 
         {{if not .IsAdmin}}
         <h2>Become Admin</h2>
-        <form action="/edit/">
-            <input type="text" size="30" placeholder="Invite Key.." onkeyup="showResult(this.value)">
+        <form action="javascript:void(0); "onsubmit="OnBecomeAdmin();">
+            <input type="text" size="30" id="invite_key" placeholder="Invite Key..">
+            <input type="submit">
             <div id="livesearch"></div>
         </form>
         {{end}}
@@ -43,12 +43,7 @@
 
         {{if .IsAdmin}}
         <h2>Your Invite Keys</h2>
-        <div id="invite_keys">
-            <div class="keyset">
-                <div class="key">aFdVsdKj <button style="float:right">copy</button></div>
-                <div class="key">dASdjdja</div>
-            </div>
-        </div>
+        <div class="keyset" id="invite_keys"></div>
         {{end}}
     </div>
 

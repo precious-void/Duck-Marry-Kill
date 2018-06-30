@@ -62,24 +62,6 @@ func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddUserHandler(w http.ResponseWriter, r *http.Request) {
-	/*
-		if r.Method == "GET" {
-			r.ParseForm()
-
-			if url, ok := r.Form["url"]; ok {
-				pieces := strings.Split(url[0], "/")
-				scname := pieces[len(pieces)-1]
-
-				user, err := getUser(scname)
-
-				if err == nil {
-					dbwrap.AddUser(user)
-				} else {
-					log.Println(err)
-				}
-			}
-		}*/
-
 	decoder := json.NewDecoder(r.Body)
 
 	var request struct {
@@ -117,7 +99,6 @@ func UpdateUserStatsHandler(w http.ResponseWriter, r *http.Request) {
 			ids = append(ids, i)
 		}
 		dbwrap.UpdateUserStats(ids)
-		log.Println(ids)
 	}
 }
 
@@ -176,33 +157,45 @@ func checkAdminCookie(r *http.Request) bool {
 }
 
 func GenerateKeyHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+	decoder := json.NewDecoder(r.Body)
 
-	if creatorID, ok := r.Form["creator_id"]; ok && checkAdminCookie(r) {
-		if val, err := strconv.Atoi(creatorID[0]); err == nil {
+	var request struct {
+		CreatorID string `json:"creator_id"`
+	}
+
+	err := decoder.Decode(&request)
+	log.Println(request, err)
+	if err == nil && request.CreatorID != "" && checkAdminCookie(r) {
+		if val, err := strconv.Atoi(request.CreatorID); err == nil {
 			key, err := dbwrap.GenerateKey(val)
 
 			if err == nil {
 				b, _ := json.Marshal(key)
 				fmt.Fprintf(w, string(b))
 			} else {
-				fmt.Fprintf(w, "permission denied")
+				fmt.Fprintf(w, err.Error())
 			}
 		}
 	}
 }
 
 func GetUsersKeysHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+	decoder := json.NewDecoder(r.Body)
 
-	if uid, ok := r.Form["uid"]; ok && checkAdminCookie(r) {
-		if val, err := strconv.Atoi(uid[0]); err == nil {
-			keys, err := dbwrap.GetUsersKeys(val)
+	var request struct {
+		UID string `json:"uid"`
+	}
 
-			if err == nil {
+	err := decoder.Decode(&request)
+	log.Println(request, err)
+
+	if err == nil && request.UID != "" && checkAdminCookie(r) {
+		if val, err := strconv.Atoi(request.UID); err == nil {
+			if keys, err := dbwrap.GetUsersKeys(val); err == nil {
 				b, _ := json.Marshal(keys)
-
 				fmt.Fprintf(w, string(b))
+			} else {
+				fmt.Fprintf(w, err.Error())
 			}
 		}
 	}
@@ -226,8 +219,6 @@ func CheckKeyHandler(w http.ResponseWriter, r *http.Request) {
 
 //----------------- Admins ----------------\\
 func CreateAdminHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-
 	sess, _ := cookiestore.Get(r, SESSCODE)
 
 	admin := dbwrap.CreateUser()
@@ -240,36 +231,45 @@ func CreateAdminHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func CheckAdminHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+	decoder := json.NewDecoder(r.Body)
 
-	if uid, ok := r.Form["uid"]; ok {
-		if val, err := strconv.Atoi(uid[0]); err == nil {
-			isAdmin, err := dbwrap.IsUserAdmin(val)
+	var request struct {
+		UID int `json:"uid,string"`
+	}
 
-			if err == nil {
-				b, _ := json.Marshal(struct {
-					IsAdmin bool `json:"is_admin"`
-				}{isAdmin})
-				fmt.Fprintf(w, string(b))
-			}
+	err := decoder.Decode(&request)
+	log.Println(request, err)
+
+	if err == nil {
+		isAdmin, err := dbwrap.IsUserAdmin(request.UID)
+
+		if err == nil {
+			b, _ := json.Marshal(struct {
+				IsAdmin bool `json:"is_admin"`
+			}{isAdmin})
+			fmt.Fprintf(w, string(b))
 		}
 	}
 }
 
 func GiveAdminHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+	decoder := json.NewDecoder(r.Body)
 
-	if uid, ok := r.Form["uid"]; ok {
-		if key, ok := r.Form["key"]; ok {
-			if val, err := strconv.Atoi(uid[0]); err == nil {
-				err = dbwrap.GiveAdminPrivs(val, key[0])
+	var request struct {
+		UID int    `json:"uid,string"`
+		Key string `json:"key"`
+	}
 
-				if err == nil {
-					fmt.Fprintf(w, "ok")
-				} else {
-					fmt.Fprintf(w, err.Error())
-				}
-			}
+	err := decoder.Decode(&request)
+	log.Println(request, err)
+
+	if err == nil {
+		err = dbwrap.GiveAdminPrivs(request.UID, request.Key)
+
+		if err == nil {
+			fmt.Fprintf(w, "ok")
+		} else {
+			fmt.Fprintf(w, err.Error())
 		}
 	}
 }
