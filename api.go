@@ -62,20 +62,44 @@ func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddUserHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		r.ParseForm()
+	/*
+		if r.Method == "GET" {
+			r.ParseForm()
 
-		if url, ok := r.Form["url"]; ok {
-			pieces := strings.Split(url[0], "/")
-			scname := pieces[len(pieces)-1]
+			if url, ok := r.Form["url"]; ok {
+				pieces := strings.Split(url[0], "/")
+				scname := pieces[len(pieces)-1]
 
-			user, err := getUser(scname)
+				user, err := getUser(scname)
 
-			if err == nil {
-				dbwrap.AddUser(user)
-			} else {
-				log.Println(err)
+				if err == nil {
+					dbwrap.AddUser(user)
+				} else {
+					log.Println(err)
+				}
 			}
+		}*/
+
+	decoder := json.NewDecoder(r.Body)
+
+	var request struct {
+		URL string `json:"url"`
+	}
+
+	err := decoder.Decode(&request)
+
+	if err == nil && request.URL != "" {
+		pieces := strings.Split(request.URL, "/")
+		scname := pieces[len(pieces)-1]
+
+		log.Println(scname)
+
+		user, err := getUser(scname)
+
+		if err == nil {
+			dbwrap.AddUser(user)
+		} else {
+			log.Println(err)
 		}
 	}
 }

@@ -18,8 +18,9 @@
 
     <div style="margin:auto; width: 50%">
         <h2 style="margin-top: 0em">Add Girl</h2>
-        <form action="/add_girl()">
-            <input type="url" id="vk_url" name="url" placeholder="VK URL..">   
+        <form action="javascript:void(0); "onsubmit="OnAddUser();">
+            <input type="url" id="vk_url" name="url" placeholder="VK URL..">  
+            <input type="submit"> 
         </form>
 
         {{if .IsAdmin}}
