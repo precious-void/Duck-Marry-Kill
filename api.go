@@ -129,7 +129,7 @@ func GetUserByHandler(w http.ResponseWriter, r *http.Request) {
 
 	err := decoder.Decode(&request)
 
-	if err == nil && request.Name != "" {
+	if err == nil {
 		user, err := dbwrap.GetUserByName(request.Name)
 		fmt.Println(user)
 		if err == nil {

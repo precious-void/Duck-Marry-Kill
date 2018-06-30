@@ -9,8 +9,10 @@ function OnSearch() {
     $.when(user).done(
         function(user){
             window.location.replace(`/edit/${user.vkid}`)
+            console.log("trying")
         }
     )
+    console.log("failed miserably")    
 }
 
 function OnAddUser() {
@@ -28,15 +30,23 @@ function OnBecomeAdmin() {
     )
 }
 
-
-function createElementFromHTML(htmlString) {
+function createKeyElement(value) {
     var div = document.createElement('div', {class: "key"});
     div.classList.add("key")
-    div.innerHTML = htmlString.trim();
+    div.innerHTML = value.trim();
   
     // Change this to div.childNodes to support multiple top-level nodes
     return div; 
   }
+
+function OnGenerateNewKey(){
+    $.when(generateInviteKey()).done(function(key){
+        var keyset = document.getElementById("invite_keys")
+        keyset.appendChild(createKeyElement(key.value))
+    }
+    )
+}
+
 
 function OnGetKeys() {
     $.when(getSessInviteKeys()).done(function(keys){
@@ -44,7 +54,7 @@ function OnGetKeys() {
 
         keys.forEach(key => {
             
-            keyset.appendChild(createElementFromHTML(key.value))
+            keyset.appendChild(createKeyElement(key.value))
         });
     }
     )

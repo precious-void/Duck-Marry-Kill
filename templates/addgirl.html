@@ -43,7 +43,9 @@
 
         {{if .IsAdmin}}
         <h2>Your Invite Keys</h2>
-        <div class="keyset" id="invite_keys"></div>
+        <div class="keyset" id="invite_keys">
+            <button onclick="OnGenerateNewKey();">Generate New Key</button>
+        </div>
         {{end}}
     </div>
 
