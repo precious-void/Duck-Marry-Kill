@@ -223,6 +223,8 @@ footer .text a {
     color: dodgerblue;
 }
 
+/* ------------------------------------- Admin ------------------------------------- */
+
 input, select {
     width: 100%;
     padding: 12px 20px;
@@ -264,4 +266,38 @@ input[type=submit]:hover {
     background: lightblue;
     padding: 4px;
     border-radius: 3mm;
+}
+
+/* ------------------------------------- Rating ------------------------------------- */
+
+.statsForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.ratingWrapper {
+    width: 100vw;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ratingWrapper .imgRatingWrapper {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.ratingWrapper .imgRating {
+    display: block;
+    width: 48vw;
+    padding-bottom: 2vh;
+}
+
+.ratingWrapper .imgRating:nth-child(odd) {
+    margin-left: 1.375vw;
+}
+.ratingWrapper .imgRating:nth-child(even) {
+    margin-right: 1vw;
 }

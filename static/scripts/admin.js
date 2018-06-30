@@ -47,7 +47,6 @@ function OnGenerateNewKey(){
     )
 }
 
-
 function OnGetKeys() {
     $.when(getSessInviteKeys()).done(function(keys){
         var keyset = document.getElementById("invite_keys")
