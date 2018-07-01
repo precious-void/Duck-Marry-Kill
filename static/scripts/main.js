@@ -1,26 +1,18 @@
+var imgButtons = document.getElementsByClassName("imgButton"),
+    imgTexts   = document.getElementsByClassName("imgText")
+
+var actions_html = ['<span style="color:red">fuck</span>', 
+               '<span style="color:orange">marry</span>', 
+               '<span style="color:green">kill</span>']
+    actions = ["fuck", "marry", "kill"],
+    choices = []
+
+var text = document.getElementById("text"),
+    switchImg = document.getElementById("switchImg")
+
+
 window.onload = function() {
-    imgButtons.forEach(imgButton => {
-        imgButton.onclick = function() {
-            this.disabled = true;
-            this.classList.add(words[i]);
-            chosen.push(this.childNodes[0].id);
-
-            var j = parseInt(this.id.slice(-1)[0])-1;
-            var name = imgTexts[j].innerText;
-            imgTexts.item(j).innerHTML = `You chose to <span style="color:${i==0?"red":i==1?"orange":"green"}">` + words[i] + "</span> " + name;
-
-            if(++i==3) {
-                text.innerText = "Well done!";
-                setTimeout(sendFDK, 2000);
-            } else {
-                text.innerHTML= `Choose whom you'd like to <span style="color:${i==0?"red":i==1?"orange":"green"}">` + words[i];
-            }
-        };
-    });
-
-    if(getCookie("gender")==null) {
-        setCookie("gender", "female", 7);
-    }
+    ResetSexSwitch();
 
     if(getCookie("_fbYshmsWE0iF73tD")==null){
         $.when(newUser()).done(
@@ -31,95 +23,107 @@ window.onload = function() {
         )
     }
 
-    switchImg.style.opacity = 1;
-    
-    setTimeout("switchImg.style.opacity = 1;", 500);
-    rotate(false);
-    FDK(true);
+    InitNewGame();
 }
 
-// -------------------------------- Variables -------------------------------- //
-
-var imgButton1 = document.getElementById("imgButton1"),
-    imgButton2 = document.getElementById("imgButton2"),
-    imgButton3 = document.getElementById("imgButton3"),
-    imgButtons = [imgButton1, imgButton2, imgButton3];    
-
-var text     = document.getElementById("text"),
-    imgTexts = document.getElementsByClassName("imgText");
-
-var switchImg = document.getElementById("switchImg"), 
-    words     = ["fuck", "marry", "kill"], 
-    gender    = getCookie("gender"),
-    chosen    = [];
-
-var xhr = new XMLHttpRequest();
-var arr = [];
-xhr.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-        arr = JSON.parse(this.responseText);
-        setGenderImg(arr);
-    }
-};
-
-
-/* -------------------------------- FDK -------------------------------- */
-
-var i = 0;
-function FDK(update) {
-    if(update) {
-        xhr.open("GET", "/FDK", true);
-        xhr.send();
-    }
-    text.innerHTML= `Choose whom you'd like to <span style="color:${i==0?"red":i==1?"orange":"green"}">` + words[0];
+switchImg.onclick = function() {
+    var gender = getCookie("gender")
+    setCookie("gender", (gender=="male"?"female":"male"))
+    ResetSexSwitch()
+    InitNewGame()
 }
 
-function sendFDK() {
-    if(i==3) {
-        xhr.open("POST", "/api/users/update_stats");
-        xhr.send(JSON.stringify({Ids: chosen}));
-        resetFDK(true);
-    }
-}
 
-function resetFDK(update) {
+function ResetGame() {
     var j = 0;
-    imgButtons.forEach(imgButton => {
+
+    Array.prototype.forEach.call(imgButtons, imgButton => {
         imgButton.className = "imgButton";
         imgButton.disabled = false;
         var str = imgTexts[j].innerText.split(" "), len = str.length;
         imgTexts[j++].innerText = str[len-2] + ' ' + str[len-1];
     });
-    i = 0;
-    chosen = [];
-    FDK(update)
+    
+    actions_html = ['<span style="color:red">fuck</span>',
+               '<span style="color:orange">marry</span>', 
+               '<span style="color:green">kill</span>']
+    actions = ["fuck", "marry", "kill"]
+    choices = []
+
+    text.innerHTML = `Who would you ${actions_html[0]}?`    
 }
 
-/* ------------------------------ Functions ------------------------------ */
+function InitNewGame() {
+    ResetGame();
 
-function setGenderImg(data) {
-    var k = (getCookie("gender")=="male"?0:3);
-    for(var i=k; i<k+3; i++) {
-        var img = imgButtons[i-k].childNodes[0];
-        img.src = data[i]["photo_url"];
-        img.id = data[i]["vkid"];
-        imgTexts.item(i-k).innerText = data[i]["name"];
+    var sex = getCookie("gender")=="male"?true:false
+    $.when(getRandomUsers(sex)).done(function(users){
+        var i = 0;
+
+        // initialize game
+        Array.prototype.forEach.call(users, function(user) {
+            imgTexts[i].innerHTML = user.name                
+            imgButtons[i].children[0].setAttribute("src", user.photo_url)
+
+            // base style
+            imgButtons[i].className = "imgButton";
+            imgButtons[i].disabled = false;
+
+            // ids
+            imgButtons[i].id_ = i
+            imgButtons[i].vkid = user.vkid
+
+            imgButtons[i++].onclick = function() {
+                ApplyAction(this.id_, this.vkid)
+                this.disabled = true            
+            }
+        });
+    })
+}
+
+function ApplyAction(id, vkid) {
+    if (actions.length > 0) {
+        var name = imgTexts[id].innerHTML;
+
+        var action_html = actions_html.shift()
+        var action = actions.shift()
+
+        imgTexts[id].innerHTML = `You chose to ${action_html} ${name}`
+        imgButtons[id].classList.add(action)
+
+        choices.push(vkid)
+
+        if (actions.length > 0) {
+            text.innerHTML = `Who would you ${actions_html[0]}?`
+        } else {
+            text.innerHTML = "Well done!"
+            setTimeout(EndGame, 2000);
+        }
     }
 }
 
-function rotate(b) {
-    if(b) {
-        var gender = getCookie("gender");
-        setCookie("gender", (gender=="male"?"female":"male"), 7);
-        setGenderImg(arr);
-        resetFDK(false);
+function EndGame() {
+    if (choices.length == 3) {
+        updateUserStats(choices)
+        InitNewGame()
     }
+}
+
+function ResetSexSwitch() {
+    if(getCookie("gender")==null) {
+        setCookie("gender", "female", 7);
+    }
+
+    switchImg.style.opacity = 1;    
+    setTimeout("switchImg.style.opacity = 1;", 500);
+
     if(getCookie("gender") == "male") {
         switchImg.style.transform="rotate(0deg)";
     } else {
         switchImg.style.transform="rotate(180deg)";
     }
 }
+
 
 /* ------------------------------ Cookies ------------------------------ */
 
@@ -143,3 +147,4 @@ function getCookie(name) {
     }
     return null;
 }
+

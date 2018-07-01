@@ -38,20 +38,24 @@ func getUser(screenname string) (user dbw.User, err error) {
 }
 
 func RandomUserHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+	decoder := json.NewDecoder(r.Body)
 
-	if sex, ok := r.Form["sex"]; ok {
-		val, err := strconv.ParseBool(sex[0])
+	var request struct {
+		Sex bool `json:"sex"`
+	}
 
-		if err == nil {
-			users, _ := dbwrap.GetRandomUsers(3, val)
-			b, _ := json.Marshal(users)
+	err := decoder.Decode(&request)
+	log.Println(request, err)
 
-			fmt.Fprintln(w, string(b))
-		}
+	if err == nil {
+		users, _ := dbwrap.GetRandomUsers(3, request.Sex)
+		b, _ := json.Marshal(users)
+
+		fmt.Fprintln(w, string(b))
 	}
 }
 
+/*
 func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		r.ParseForm()
@@ -65,7 +69,7 @@ func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-}
+}*/
 
 func AddUserHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
@@ -94,17 +98,18 @@ func AddUserHandler(w http.ResponseWriter, r *http.Request) {
 
 func UpdateUserStatsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		var d Data
-		err := json.NewDecoder(r.Body).Decode(&d)
-		if err != nil {
+		var request struct {
+			VKIDs []int `json:"vkids"`
+		}
+
+		err := json.NewDecoder(r.Body).Decode(&request)
+		log.Println(request, err)
+
+		if err == nil {
+			//dbwrap.UpdateUserStats(request.VKIDs)
+		} else {
 			panic(err)
 		}
-		var ids = []int{}
-		for _, s := range d.Ids {
-			i, _ := strconv.Atoi(s)
-			ids = append(ids, i)
-		}
-		dbwrap.UpdateUserStats(ids)
 	}
 }
 

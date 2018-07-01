@@ -1,3 +1,37 @@
+function getRandomUsers(sex) {
+    return $.ajax
+    ({
+        type: "POST",
+        url: '/api/users/get',
+        dataType: 'json',
+        async: true,
+        data: JSON.stringify({sex: sex}),
+        success: function (data) {
+            return data
+        },
+        error: function() {
+            return null
+        }
+    })
+}
+
+function updateUserStats(users) {
+    return $.ajax
+    ({
+        type: "POST",
+        url: "/api/users/update_stats",
+        dataType: "json",
+        async: true,
+        data: JSON.stringify({vkids: users}),
+        success: function (data) {
+            return data
+        },
+        error: function() {
+            return null
+        }
+    })
+}
+
 function getUserByName(name) {
     return $.ajax
     ({
