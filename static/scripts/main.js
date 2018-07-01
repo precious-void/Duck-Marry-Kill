@@ -40,8 +40,8 @@ function ResetGame() {
     Array.prototype.forEach.call(imgButtons, imgButton => {
         imgButton.className = "imgButton";
         imgButton.disabled = false;
-        var str = imgTexts[j].innerText.split(" "), len = str.length;
-        imgTexts[j++].innerText = str[len-2] + ' ' + str[len-1];
+        //var str = imgTexts[j].innerText.split(" "), len = str.length;
+        imgTexts[j++].innerText = imgButton.user.name
     });
     
     actions_html = ['<span style="color:red">fuck</span>',
@@ -54,8 +54,6 @@ function ResetGame() {
 }
 
 function InitNewGame() {
-    ResetGame();
-
     var sex = getCookie("gender")=="male"?true:false
     $.when(getRandomUsers(sex)).done(function(users){
         var i = 0;
@@ -71,27 +69,36 @@ function InitNewGame() {
 
             // ids
             imgButtons[i].id_ = i
-            imgButtons[i].vkid = user.vkid
+            imgButtons[i].user = user
 
             imgButtons[i++].onclick = function() {
-                ApplyAction(this.id_, this.vkid)
+                ApplyAction(this.id_, this.user)
+                test(this.user)
                 this.disabled = true            
             }
         });
+
+        ResetGame();
     })
 }
 
-function ApplyAction(id, vkid) {
+function percentAgree(stats, action) {
+    return Math.floor(stats[action] / (stats["fucks"] + stats["marrys"] + stats["kills"])*100)
+}
+
+function ApplyAction(id, user) {
     if (actions.length > 0) {
         var name = imgTexts[id].innerHTML;
 
         var action_html = actions_html.shift()
         var action = actions.shift()
 
-        imgTexts[id].innerHTML = `You chose to ${action_html} ${name}`
+        var users_agree = percentAgree(user.stats, action+"s")
+
+        imgTexts[id].innerHTML = `You chose to ${action_html} ${name} <br> ${users_agree}% of users agre with you.`
         imgButtons[id].classList.add(action)
 
-        choices.push(vkid)
+        choices.push(user.vkid)
 
         if (actions.length > 0) {
             text.innerHTML = `Who would you ${actions_html[0]}?`
