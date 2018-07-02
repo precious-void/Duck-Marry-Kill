@@ -73,7 +73,6 @@ function InitNewGame() {
 
             imgButtons[i++].onclick = function() {
                 ApplyAction(this.id_, this.user)
-                test(this.user)
                 this.disabled = true            
             }
         });
