@@ -4,11 +4,10 @@ import vk
 import json
 import argparse
 
-from config import APP_ID, USER_ID, PASSWORD
+from config import ACCESS_TOKEN
 
-sess = vk.AuthSession(APP_ID, USER_ID, PASSWORD)
+sess = vk.Session(ACCESS_TOKEN)
 api = vk.API(sess)
-
 
 def get_girl_by_vk_screenname(screenname):
     response = api.users.get(
