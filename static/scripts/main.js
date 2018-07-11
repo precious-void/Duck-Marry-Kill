@@ -93,8 +93,9 @@ function ApplyAction(id, user) {
         var action = actions.shift()
 
         var users_agree = percentAgree(user.stats, action+"s")
-
-        imgTexts[id].innerHTML = `You chose to ${action_html} ${name} <br> ${users_agree}% of users agre with you.`
+        var agree_string = users_agree?`<br> ${users_agree}% of users agre with you.`:``
+        
+        imgTexts[id].innerHTML = `You chose to ${action_html} ${name} ${agree_string}`
         imgButtons[id].classList.add(action)
 
         choices.push(user.vkid)
