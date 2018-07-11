@@ -106,7 +106,7 @@ func UpdateUserStatsHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(request, err)
 
 		if err == nil {
-			//dbwrap.UpdateUserStats(request.VKIDs)
+			dbwrap.UpdateUserStats(request.VKIDs)
 		} else {
 			panic(err)
 		}
