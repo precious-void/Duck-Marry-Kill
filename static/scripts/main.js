@@ -41,7 +41,7 @@ function ResetGame() {
         imgButton.className = "imgButton";
         imgButton.disabled = false;
         //var str = imgTexts[j].innerText.split(" "), len = str.length;
-        imgTexts[j++].innerText = imgButton.user.name
+        imgTexts[j++].innerHTML = `<a href="https://vk.com/id${imgButton.user.vkid}" target=_blank>${imgButton.user.name}</a>`
     });
     
     actions_html = ['<span style="color:red">fuck</span>',

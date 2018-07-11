@@ -86,6 +86,15 @@ h2 {
 
 /*--------------------------------- Main ---------------------------------*/
 
+a, u {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    color: gray;
+}
+
 .indexWrapper {
     width: 100vw;   
     margin: auto 0;
