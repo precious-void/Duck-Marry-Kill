@@ -1,313 +1,139 @@
-/*--------------------------------- Common ---------------------------------*/
-
-* {
+html, body {
+    width:100%;
+    height:100%;
     margin: 0;
     padding: 0;
-    font-family: 'Poppins', sans-serif;
-    font-weight: bold;
 }
-
-html {
-    min-height: 100vh;
-    min-width: 100vw;
-}
-
-body {
-    transition: all 2s ease;
-}
-
-button {
-    cursor: pointer;
-    outline: 0;
-    border: 0;
-}
-
-h2 {
-    margin-top: 1em;
-}
-
-/*--------------------------------- Navbar ---------------------------------*/
-
-.nav {
-    list-style: none;
+.main {
+    width:100%;
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+    min-height:calc(100% - 64px);
+    align-content: center;
     align-items: center;
-    padding: 3vh 0;
-    font-weight: bold;
-    border-bottom: 6px solid rgba(0,0,0,0.1);
-    margin-bottom: 1.5em;
+    justify-content: center;
+}
+footer{
+    width: 100%;
+    height:auto;
+    background: #333;
+    color:white;
+}
+nav{
+    background: #fff;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    display: flex;
+    box-shadow: none;
+    border-bottom: 1px solid #333;
+}
+.nav-wrapper{
+    width:80%;
+}
+nav img{
+    max-height:100%;
+    padding: 1.5rem 0;
+}
+nav ul a, nav a{
+    color: #000;
 }
 
-.nav li a {
+.page-footer{
+    background: #fff;
+    border-top: 1px solid #333;
+}
+
+.main{
+
+}
+.wrapper{
     display: block;
-    text-decoration: none;
-    color: black;
+    width: 80%;
 }
-
-.nav li a:hover {
-    color: green;
-    transition: all 0.4s ease;
-}
-
-.nav li a.active {
-    color: green;
-}
-
-#logo {
-    position: absolute;
-    top: 1.5vh;
-    left: 3vh;
-    width: 6em;
-}
-
-#switch {
-    position: absolute;
-    right: 1.5vh;
-    top: 1.5vh;
-    height: 6vh;
-    width: 6vh;
-    overflow-y: hidden;
-    background: transparent;
-    border: 1.5px solid black;
-    border-radius: 50%;
-}
-
-#switch:disabled {
-    display: none;
-}
-
-#switch img {
-    height: 12vh;
-    transition: all 1s ease;
-    opacity: 0;
-}
-
-/*--------------------------------- Main ---------------------------------*/
-
-a, u {
-    color: black;
-    text-decoration: none;
-}
-
-a:hover {
-    color: gray;
-}
-
-.indexWrapper {
-    width: 100vw;   
-    margin: auto 0;
-}
-
-.indexWrapper ul {
-    display: flex;
-    flex-direction: row;
-    height: 50vh;
-    padding-top: 2vh;
-}
-
-.indexWrapper ul li {
-    display: flex;
-    flex-direction: column;
-    width: calc(100%/3);
+.card-image{
+    background-size: cover;
     height: 100%;
+    background-position: center; 
 }
-
-.indexWrapper .imgButton {
-    width: 66%;
-    margin: auto;
+.card{
     overflow: hidden;
-    border-radius: 10%;
-    border: 6px solid gray;
-    transition: all .5s ease;
+    min-height: 50vh;
+    height:50vh;
+    max-height: 50vh;
+    border-radius: 10px;
 }
-
-.indexWrapper .imgButton img {
-    display: block;
-    width: 100%; 
-}
-
-.indexWrapper .imgButton.fuck {
-    border: 6px solid rgb(211, 69, 69);
-}
-.indexWrapper .imgButton.marry {
-    border: 6px solid orange;
-}
-.indexWrapper .imgButton.kill {
-    border: 6px solid green;
-}
-
-.indexWrapper .imgText {
-    display: block;
-    font-size: 1.2em;
-    margin: 0 auto;
-    text-align: center;
-    /*margin-top: 2%;*/
-}
-
-.indexWrapper .control {
-    display: flex;
-    margin-top: 15vh;
-    flex-direction: column;
-    align-items: center;
-    width: 100vw;
-}
-
-.indexWrapper .text {
-    font-size: 1.5em;
-}
-
-.indexWrapper button {
-    font-size: 1.2em;
-    background: none;
-    color: green;
-}
-
-/* ------------------------------------- Edit ------------------------------------- */
-
-.editWrapper {
-    max-width: 40%;
-    margin: 0 auto;
-}
-
-.editWrapper input[type="submit"] {
-    display: none;
-}
-
-.editWrapper .submit label {
-    display: block;
-    border: 0;
-    text-decoration: none;
-    outline: none;
-    text-align: center;
-    width: 100%;
-    margin-top: 5%;
-}
-
-.editWrapper .submit label:hover {
-    background: rgb(144, 165, 185);
-}
-
-.editWrapper .field {
-    display: flex;
-    flex-flow: column-reverse;
-    padding: 1% 0; 
-    padding-top: 25px;
-}
-
-.editWrapper label, .editWrapper input {
-    padding-left: 5px;
-}
-  
-.editWrapper input {
-    padding: 0.2em 0.5em;
-    font-size: 0.8em;
-    font-weight: lighter;
-    border: none;
-    outline: 0;
-    background: lightgray;
-    text-overflow: ellipsis;
-}
-  
-.editWrapper label {
-    text-transform: uppercase;
-}
-
-/* ------------------------------------- Footer ------------------------------------- */
-
-footer {
-    position: relative;
-    bottom: 0;
-    width: 100%;
-}
-
-footer .text {      
-    color: black;
-    font-size: 1em;
-    padding-left: 0.2em;
-}
-
-footer .text a {
-    text-decoration: none;
-    color: dodgerblue;
-}
-
-/* ------------------------------------- Admin ------------------------------------- */
-
-input, select {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid lightblue;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-weight: normal;
-}
-
-input[type=submit] {
-    width: 100%;
-    background-color: lightblue;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
+.card.hoverable:hover{
     cursor: pointer;
 }
-
-input[type=submit]:hover {
-    background-color: darkcyan;
+.card-title{
+    width:100%;
+    padding: 0.4rem 1.5rem 0.8rem 1.5rem !important;
+    background: rgba(0,0,0,0.3)
 }
-
-.keyset {
-    width: 50%;
+.sidenav img{
+    max-height:100%;
+    padding: 1.2rem 0;
 }
-
-.keyset .key {
-    font-weight: normal;
-    padding: 0.5em;
-    border-bottom: 1px solid lightgray;
-}
-
-.keyset button {
-    font-weight: normal;
-    background: lightblue;
-    padding: 4px;
-    border-radius: 3mm;
-}
-
-/* ------------------------------------- Rating ------------------------------------- */
-
-.statsForm {
+.row.candidates{
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    width: 50%;
+    justify-content: center;
+}
+.candidates > div{
+    margin: 0 1rem !important;
+}
+.mobile{
+    display: none;
+}
+.question-wrapper{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.question-wrapper > button{
     margin: 0 auto;
 }
-
-.ratingWrapper {
-    width: 100vw;
-    display: flex;
-    flex-wrap: wrap;
+.question-wrapper > button:hover{
+    background: #ffca28;
 }
-
-.ratingWrapper .imgRatingWrapper {
-    height: 100vh;
-    overflow: hidden;
-}
-
-.ratingWrapper .imgRating {
-    display: block;
-    width: 48vw;
-    padding-bottom: 2vh;
-}
-
-.ratingWrapper .imgRating:nth-child(odd) {
-    margin-left: 1.375vw;
-}
-.ratingWrapper .imgRating:nth-child(even) {
-    margin-right: 1vw;
+@media only screen and (max-width: 601px){
+    .card{
+        min-height: 30vh;
+        height:30vh;
+        max-height: 30vh;
+    }
+    .candidates{
+        flex-direction: column;
+    }
+    .candidates > div{
+        margin: 0 !important;
+    }
+    .question{
+        position: fixed;
+        left: 0;
+        background: #fff;
+        border-top:1px solid #000;
+        bottom:0;
+        text-align: left;
+        width:100%;
+    }
+    footer{
+        margin-bottom: 5rem;
+    }
+    .question button > i{
+        color:#000;
+    }
+    .btn-floating:hover{
+        background: #fff;
+    }
+    .question-wrapper-mob{
+        display: flex;
+        align-content: center;
+        align-items: center;
+        flex-direction: row;
+        width:80%;
+        margin:0 auto;
+    }
+    .question button{
+        margin-left: auto;
+    }
 }

@@ -28,7 +28,7 @@ window.onload = function() {
 
 switchImg.onclick = function() {
     var gender = getCookie("gender")
-    setCookie("gender", (gender=="male"?"female":"male"))
+    setCookie("gender", (gender == "male" ? "female" : "male"))
     ResetSexSwitch()
     InitNewGame()
 }

@@ -1,29 +1,191 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/materialize.min.css">    
     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <title>FDK</title>
+
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>FMK</title>
 </head>
 <body>
-    <a href="/"><img src="../static/img/logo.svg" id="logo"></a>
-    <button id="switch" type="button" onclick="switchGender(true);"><img style="overflow:hidden" src="../static/img/switch.png" id="switchImg"></button>
-    <ul class="nav" id="nav">
-        <li><a href="/rating/">Rating</a></li>
-        <li><a href="/admin/">Add Person</a></li>
-        <li><a href="/faq/">FAQ</a></li>
+    
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/"><img src="../static/img/FMK.png"></a>
+            <a data-target="mobile-demo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li class="collection-item"><a href="/rating/"><i class="left material-icons">equalizer</i>Rating</a></li>
+                <li class="collection-item"><a href="/admin/"><i class="left material-icons">person_add</i>Add Person</a></li>
+                <li class="collection-item"><a href="/faq/"><i class="left material-icons">info_outline</i>FAQ</a></li>                
+            </ul>
+        </div>
+    </nav>
+    
+    <ul class="sidenav" id="mobile-demo">
+        <li><a href="/"><img src="../static/img/FMK.png"></a></li>
+        <div class="divider" style="margin:0;"></div>
+        <li><a href="/rating/"><i class="left material-icons">equalizer</i>Rating</a></li>
+        <li><a href="/admin/"><i class="left material-icons">person_add</i>Add Person</a></li>
+        <li><a href="/faq/"><i class="left material-icons">info_outline</i>FAQ</a></li>
     </ul>
-    <form class="statsForm">
-        <label>Fuck<input class="radioRating" type="radio" name="stat" value="fuck" checked></label>
-        <label>Marry<input class="radioRating" type="radio" name="stat" value="marry"></label>
-        <label>Kill<input class="radioRating" type="radio" name="stat" value="kill"></label>
-    </form>
-    <div class="ratingWrapper" id="ratingWrapper"></div>
-    <footer> 
-        <div class="text"><a href="/about/">About.</a> Все права не защищены. </div>
+    <style>
+        .row > .col > h5{
+            font-weight: 600;
+            margin: 0;
+            display: inline-block;
+        }
+        .row > .col > a{
+            margin: 0;
+            display: inline-block;
+        }
+        .divider{
+            margin-top: 0.3rem;
+        }
+        .list > .row > div{
+            background-size: cover;
+            background-position: center; 
+            min-height: 30vh;
+            margin: 0 1rem;
+            padding: 0;
+        }
+        .list {
+            margin: 1rem 0;
+        }
+        .list > .row{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            width:100%;
+        }
+        .list span{
+            color:#fff;
+            font-weight: 100;
+            background: rgba(0,0,0,0.3);
+            padding: 0.4rem 1.5rem 0.8rem 1.5rem !important;
+            width:100%;
+            text-align: center;
+        }
+        .card{
+            min-height: 30vh;
+            height: 40vh !important;
+            max-height: 40vh;
+        }
+        
+        @media only screen and (max-width: 601px){
+            .list > .row{
+                display:none;
+            }
+            .list > .row:first-child{
+                display:inline-flex;
+            }
+            .main{
+                margin: 2rem 0;
+            }
+            .list > .row{
+                flex-direction: column;
+                margin:0;
+            }
+            .list > .row > div{
+                margin: 0;
+                width:100%;
+            }
+            .list .card{
+                min-height: 30vh !important;
+                height: 30vh !important;
+            }
+            .page-footer{
+                margin:0;
+            }
+            
+        }
+    </style>
+    <div class="main">
+        <div class="wrapper">
+            <div class="row">
+                <div class="col s12">
+                    <h5>Fuck</h5> <a class="right" href="Fuck_all">See all <i class="material-icons right">keyboard_arrow_right</i></a>
+                    <div class="divider"></div>
+                    <div id="fuck_list" class="list">
+                        <div class="row">
+                            
+                            <div class="col s12 m3 l3">
+                                <div class="card white">
+                                    <div class="card-image" style="background-image: url(../../../static/img/img1.jpg)">
+                                        <span class="card-title">Anna Markina<br>234</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col s12 m3 l3">
+                                <div class="card white">
+                                    <div class="card-image" style="background-image: url(../../../static/img/img2.jpg)">
+                                        <span class="card-title">Nikolay Markin<br>234</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col s12 m3 l3">
+                                <div class="card white">
+                                    <div class="card-image" style="background-image: url(../../../static/img/img5.jpg)">
+                                        <span class="card-title">Anna Markina<br>234</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="col s12">
+                    <h5>Marry</h5><a class="right" href="Marry_all">See all <i class="material-icons right">keyboard_arrow_right</i></a>
+                    <div class="divider"></div>
+
+                </div>
+                <div class="col s12">
+                    <h5>Kill</h5><a class="right" href="Kill_all">See all <i class="material-icons right">keyboard_arrow_right</i></a>
+                    <div class="divider"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <footer class="page-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col l6 s12">
+            <h5 class="black-text">Fuck Marry Kill</h5>
+            <p class="grey-text text-darken-2">Developed by team of wizards-pussydestroyers. We bail on your rights.</p>
+          </div>
+          <div class="col l4 offset-l2 s12">
+            <h5 class="black-text">Developers</h5>
+            <ul>
+              <li><a class="grey-text text-darken-1" href="">Denis Penis</a></li>
+              <li><a class="grey-text text-darken-1" href="">StArt</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container grey-text text-darken-4 right">
+        © 2018 All rights reserved
+        <a class="grey-text text-darken-4 right" href="/about/">About</a>
+        </div>
+      </div>
     </footer>
 </body>
+<script>
+$(document).ready(function(){
+    $('.sidenav').sidenav();
+});
+</script>
+<script src="../static/scripts/materialize.min.js"></script>
 <script src="../static/scripts/rating.js"></script>
 </html>
