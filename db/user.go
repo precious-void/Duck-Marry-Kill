@@ -33,7 +33,7 @@ func (e *notEnoughPicsError) Error() string {
 
 // AddUser adds user to database
 func (dbw *Wrapper) AddUser(user User) (err error) {
-	if n, _ := dbw.Users.Find(user).Count(); n == 0 {
+	if n, _ := dbw.Users.Find(bson.M{"vkid": user.VKID}).Count(); n == 0 {
 		err = dbw.Users.Insert(user)
 	}
 	return err
