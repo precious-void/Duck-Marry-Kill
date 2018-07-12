@@ -4,13 +4,13 @@ function getRandomUsers(sex) {
         type: "POST",
         url: '/api/users/get',
         dataType: 'json',
-        async: true,
+        async: false,
         data: JSON.stringify({sex: sex}),
         success: function (data) {
-            return data
+            return data;
         },
         error: function() {
-            return null
+            return null;
         }
     })
 }

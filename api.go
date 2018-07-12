@@ -41,7 +41,7 @@ func RandomUserHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 
 	var request struct {
-		Sex bool `json:"sex"`
+		Sex bool `json:"sex,omitempty"`
 	}
 
 	err := decoder.Decode(&request)
@@ -50,7 +50,6 @@ func RandomUserHandler(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		users, _ := dbwrap.GetRandomUsers(3, request.Sex)
 		b, _ := json.Marshal(users)
-
 		fmt.Fprintln(w, string(b))
 	}
 }

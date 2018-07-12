@@ -1,19 +1,5 @@
-var imgButtons = document.getElementsByClassName("imgButton"),
-    imgTexts   = document.getElementsByClassName("imgText")
-
-var actions_html = ['<span style="color:red">fuck</span>', 
-               '<span style="color:orange">marry</span>', 
-               '<span style="color:green">kill</span>']
-    actions = ["fuck", "marry", "kill"],
-    choices = []
-
-var text = document.getElementById("text"),
-    switchImg = document.getElementById("switchImg")
-
-
 window.onload = function() {
     ResetSexSwitch();
-
     if(getCookie("_fbYshmsWE0iF73tD")==null){
         $.when(newUser()).done(
             function (sess) {
@@ -22,62 +8,69 @@ window.onload = function() {
             }
         )
     }
-
     InitNewGame();
 }
 
-switchImg.onclick = function() {
+function setSex() {
     var gender = getCookie("gender")
     setCookie("gender", (gender == "male" ? "female" : "male"))
     ResetSexSwitch()
     InitNewGame()
 }
 
-
 function ResetGame() {
-    var j = 0;
+    // Reinit constants
+    $(".progress").hide();
+    $(".determinate").css("width", "0%");
+    $(".question p").html('Who would you <span class="fuck-span">fuck</span>?');
 
-    Array.prototype.forEach.call(imgButtons, imgButton => {
-        imgButton.className = "imgButton";
-        imgButton.disabled = false;
-        //var str = imgTexts[j].innerText.split(" "), len = str.length;
-        imgTexts[j++].innerHTML = `<a href="https://vk.com/id${imgButton.user.vkid}" target=_blank>${imgButton.user.name}</a>`
-    });
+    window.actions = ["fuck", "marry", "kill"]
+    window.choises = []
+
+    var img = ["#photo_1", "#photo_2", "#photo_3"], i = 0;
+
+    for (i = 0; i < 3; i++){
+        img_sel = img[i];
+        $(img[i]).removeClass();
+        $(img[i]).addClass("card blue-grey darken-1 hoverable");
+        $(img[i] + " .card-title").html(window.users[i]["name"]);
+        $(img[i]).attr("onclick", `ApplyAction(${i})`);
+
+    }
+    // Array.prototype.forEach.call(imgButtons, imgButton => {
+    //     imgTexts[j++].innerHTML = `<a href="https://vk.com/id${imgButton.user.vkid}" target=_blank>${imgButton.user.name}</a>`
+    // });
     
-    actions_html = ['<span style="color:red">fuck</span>',
-               '<span style="color:orange">marry</span>', 
-               '<span style="color:green">kill</span>']
-    actions = ["fuck", "marry", "kill"]
-    choices = []
-
-    text.innerHTML = `Who would you ${actions_html[0]}?`    
+    $(".question span").html(`${window.actions[0]}`);
+    $(".question span").removeClass();
+    $(".question span").addClass("fuck-span");
 }
 
 function InitNewGame() {
-    var sex = getCookie("gender")=="male"?true:false
+    $(".question p").html('Who would you <span class="fuck-span">fuck</span>?');
+
+    window.actions = ["fuck", "marry", "kill"];
+    window.choises = []
+
+    $(".question span").html(`${window.actions[0]}`);
+    $(".question span").removeClass();
+    $(".question span").addClass("fuck-span");
+
+    var sex = getCookie("gender")== "male" ? true : false;
     $.when(getRandomUsers(sex)).done(function(users){
-        var i = 0;
 
-        // initialize game
-        Array.prototype.forEach.call(users, function(user) {
-            imgTexts[i].innerHTML = user.name                
-            imgButtons[i].children[0].setAttribute("src", user.photo_url)
+        window.users = users;
+        var img = ["#photo_1", "#photo_2", "#photo_3"], i = 0;
 
-            // base style
-            imgButtons[i].className = "imgButton";
-            imgButtons[i].disabled = false;
-
-            // ids
-            imgButtons[i].id_ = i
-            imgButtons[i].user = user
-
-            imgButtons[i++].onclick = function() {
-                ApplyAction(this.id_, this.user)
-                this.disabled = true            
-            }
-        });
-
-        ResetGame();
+        for (i = 0; i < 3; i++){
+            img_sel = img[i];
+            $(img[i]).removeClass();
+            $(img[i]).addClass("card blue-grey darken-1 hoverable");
+            $(img[i] + " .card-title").html(window.users[i]["name"]);
+            $(img[i] + " .card-image").css("background-image", `url(${window.users[i]["photo_url"]})`);
+            $(img[i]).attr("onclick", `ApplyAction(${i})`);
+        }
+        
     })
 }
 
@@ -85,34 +78,42 @@ function percentAgree(stats, action) {
     return Math.floor(stats[action] / (stats["fucks"] + stats["marrys"] + stats["kills"])*100)
 }
 
-function ApplyAction(id, user) {
-    if (actions.length > 0) {
-        var name = imgTexts[id].innerHTML;
-
-        var action_html = actions_html.shift()
-        var action = actions.shift()
-
-        var users_agree = percentAgree(user.stats, action+"s")
-        var agree_string = users_agree?`<br> ${users_agree}% of users agre with you.`:``
+function ApplyAction(id) {
+    if (window.actions.length > 0) {
         
-        imgTexts[id].innerHTML = `You chose to ${action_html} ${name} ${agree_string}`
-        imgButtons[id].classList.add(action)
+        var name = window.users[id].name;
+        var act = window.actions.shift();
+        var users_agree = percentAgree(window.users[id].stats, act + "s")
+        var agree_string = users_agree ? `<br> <span>${users_agree}% of users agree with you.</span>`:``
+        
+        $(`#photo_${id + 1} .card-title`).html(`${name} ${agree_string}`);
+        $(`#photo_${id + 1}`).addClass(act);
 
-        choices.push(user.vkid)
+        window.choises.push(window.users[id].vkid)
 
         if (actions.length > 0) {
-            text.innerHTML = `Who would you ${actions_html[0]}?`
+
+            $(".question span").html(`${window.actions[0]}`);
+            $(".question span").removeClass();
+            $(".question span").addClass(`${window.actions[0]}-span`);
+
         } else {
-            text.innerHTML = "Well done!"
-            setTimeout(EndGame, 2000);
+            $(".question p").html('Well done!');
+            $(".progress").show();
+            $(".determinate").css("width", "100%");
+
+            setTimeout(EndGame, 3000);
         }
     }
+    else{ResetGame();}
 }
 
 function EndGame() {
-    if (choices.length == 3) {
-        updateUserStats(choices)
-        InitNewGame()
+    if (window.choises.length == 3) {
+        $(".determinate").css("width", "0%");
+        $(".progress").hide();
+        updateUserStats(window.choises)
+        InitNewGame();
     }
 }
 
@@ -121,13 +122,14 @@ function ResetSexSwitch() {
         setCookie("gender", "female", 7);
     }
 
-    switchImg.style.opacity = 1;    
-    setTimeout("switchImg.style.opacity = 1;", 500);
-
     if(getCookie("gender") == "male") {
-        switchImg.style.transform="rotate(0deg)";
+        $(".nav-wrapper > .ham > i").css("color", "blue");
+        $("#nav-mobile > li:last-child i").css("color", "blue");
+
     } else {
-        switchImg.style.transform="rotate(180deg)";
+        $(".nav-wrapper > .ham > i").css("color", "red");
+        $("#nav-mobile > li:last-child i").css("color", "red");
+
     }
 }
 

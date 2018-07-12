@@ -18,14 +18,13 @@
         <div class="nav-wrapper">
             <a href="/"><img src="../static/img/FMK.png"></a>
             <a data-target="mobile-demo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
-            <a class="right"><i class="material-icons hide-on-large-only">wc</i></a>
+            <a class="right ham" onclick="setSex()"><i class="material-icons hide-on-large-only">wc</i></a>
 
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li class="collection-item"><a href="/rating/"><i class="left material-icons">equalizer</i>Rating</a></li>
                 <li class="collection-item"><a href="/admin/"><i class="left material-icons">person_add</i>Add Person</a></li>
                 <li class="collection-item"><a href="/faq/"><i class="left material-icons">info_outline</i>FAQ</a></li>                
-                <li class="collection-item"><a href="/"><i class="left material-icons">wc</i>Change Sex</a></li>
-
+                <li class="collection-item" onclick="setSex()"><a href="/"><i class="left material-icons">wc</i>Change Sex</a></li>
             </ul>
         </div>
     </nav>
@@ -37,38 +36,39 @@
         <li><a href="/admin/"><i class="left material-icons">person_add</i>Add Person</a></li>
         <li><a href="/faq/"><i class="left material-icons">info_outline</i>FAQ</a></li>
     </ul>
-   
+    <div class="progress"><div class="determinate" style="width: 0%"></div></div>
+    
     <div class="main">
         <div class="wrapper">
             <div class="row candidates">
                 
             <div class="col s12 m8 l3">
-                <div class="card blue-grey darken-1 hoverable fuck" id="photo_1">
-                    <div class="card-image" style="background-image: url(../../static/img/img1.jpg)">
-                        <span class="card-title kill">Anna Markina</span>
+                <div class="card blue-grey darken-1 hoverable" id="photo_1">
+                    <div class="card-image">
+                        <span class="card-title"></span>
                     </div>
                 </div>
             </div>
                 
             <div class="col s12 m8 l3">
-                <div class="card blue-grey darken-1 hoverable kill" id="photo_2">
-                    <div class="card-image" style="background-image: url(../../static/img/img4.jpg)">
-                        <span class="card-title marry">Ksenia Kudakova</span>
+                <div class="card blue-grey darken-1 hoverable" id="photo_2">
+                    <div class="card-image">
+                        <span class="card-title"></span>
                     </div>
                 </div>
             </div>
             
             <div class="col s12 m8 l3">
-                <div class="card blue-grey darken-1 hoverable marry" id="photo_3">
-                    <div class="card-image" style="background-image: url(../../static/img/img5.jpg)">
-                        <span class="card-title">Zhenya Sorokina</span>
+                <div class="card blue-grey darken-1 hoverable" id="photo_3">
+                    <div class="card-image">
+                        <span class="card-title"></span>
                     </div>
                 </div>
             </div>
                 
           </div>
+
             <style>
-                
                 .marry{
                     cursor: context-menu !important;
                     box-shadow: 0 8px 17px 0 rgba(255, 235, 0, 0.2), 0 6px 20px 0 rgba(0,0,0,0.19) !important;
@@ -79,17 +79,17 @@
                 }
                 .fuck{
                     cursor: context-menu !important;
-                    box-shadow: 0 8px 17px 0 rgba(255, 0, 0, 0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+                    box-shadow: 0 8px 17px 0 rgba(255, 0, 0, 0.2), 0 6px 20px 0 rgba(0,0,0,0.19) !important;
                 }
                 
                 .fuck span{
-                    background: rgba(255, 0, 0, 0.3);
+                    background: rgba(158, 17, 17, 0.64);
                 }
                 .marry span{
-                    background: rgba(251, 244, 0, 0.3);
+                    background: rgba(98, 96, 18, 0.7);
                 }
                 .kill span{
-                    background: rgba(0, 251, 77, 0.3);
+                    background: rgba(0, 133, 41, 0.7);
                 }
                 
                 .kill-span{
@@ -102,14 +102,15 @@
                     color: rgb(255, 0, 0);
                 }
             </style>
+
             <div class="question">
                 <div class="question-wrapper-mob hide-on-med-and-up">
-                    <p class="flow-text">Who would you <span class="marry-span">fuck</span>?</p>
+                    <p class="flow-text">Who would you <span class="fuck-span">fuck</span>?</p>
                     <button class="btn-floating waves-effect waves-light btn-flat right" onclick="ResetGame()"><i class="material-icons">refresh</i></button>
                 </div>
                 
                 <div class="question-wrapper hide-on-small-only">
-                    <p class="flow-text center">Who would you <span class="marry-span">fuck</span>?</p>
+                    <p class="flow-text center">Who would you <span class="fuck-span">fuck</span>?</p>
                     <button class="btn waves-effect waves-light btn-flat btn-small" onclick="ResetGame()"><i class="material-icons left">refresh</i>Reset</button>
                 </div>
                 
@@ -149,7 +150,10 @@ $(document).ready(function(){
 });
 </script>
 <script src="../static/scripts/materialize.min.js"></script>
+
 <script src="../static/scripts/main.js"></script>
+
 <script src="../static/scripts/script.js"></script>
+
 <script src="../static/scripts/api.js"></script>
 </html>

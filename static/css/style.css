@@ -137,3 +137,23 @@ nav ul a, nav a{
         margin-left: auto;
     }
 }
+.ham{
+    cursor: pointer;
+}
+.card-title > span{
+    font-size:1.1rem;
+    background: unset !important;
+}
+.card .card-title {
+    font-size: 20px;
+    font-weight: 300;
+}
+.determinate{
+    transition: 3s !important;
+    background-color: #ffca28 !important;
+}
+.progress{
+    margin:0;
+    display:none;
+    background-color: #ffefbe;
+}

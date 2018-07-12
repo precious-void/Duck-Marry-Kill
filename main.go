@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -22,6 +23,8 @@ var (
 )
 
 func main() {
+	fmt.Println("penis!")
+
 	if dberr != nil {
 		panic(dberr)
 	}
