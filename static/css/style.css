@@ -96,6 +96,10 @@ nav ul a, nav a{
     background: #ffca28;
 }
 @media only screen and (max-width: 601px){
+    .progress{
+        position: fixed;
+        bottom:0;
+    }
     .card{
         min-height: 30vh;
         height:30vh;

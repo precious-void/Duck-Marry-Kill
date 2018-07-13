@@ -93,6 +93,6 @@ func (dbw *Wrapper) GetTopRatedUsers(sex bool, stat string) (users []User, err e
 	} else {
 		sortBy = []string{"-stats.kills"}
 	}
-	err = dbw.Users.Find(bson.M{"sex": sex}).Sort(sortBy...).Limit(10).All(&users)
+	err = dbw.Users.Find(bson.M{"sex": sex}).Sort(sortBy...).Limit(6).All(&users)
 	return
 }

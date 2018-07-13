@@ -19,11 +19,13 @@
         <div class="nav-wrapper">
             <a href="/"><img src="../static/img/FMK.png"></a>
             <a data-target="mobile-demo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+            <a class="right ham" onclick="setSex()"><i class="material-icons hide-on-large-only">wc</i></a>
 
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li class="collection-item"><a href="/rating/"><i class="left material-icons">equalizer</i>Rating</a></li>
                 <li class="collection-item"><a href="/admin/"><i class="left material-icons">person_add</i>Add Person</a></li>
                 <li class="collection-item"><a href="/faq/"><i class="left material-icons">info_outline</i>FAQ</a></li>                
+                <li class="collection-item" onclick="setSex()"><a href="/"><i class="left material-icons">wc</i>Change Sex</a></li>
             </ul>
         </div>
     </nav>

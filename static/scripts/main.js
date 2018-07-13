@@ -129,7 +129,6 @@ function ResetSexSwitch() {
     } else {
         $(".nav-wrapper > .ham > i").css("color", "red");
         $("#nav-mobile > li:last-child i").css("color", "red");
-
     }
 }
 

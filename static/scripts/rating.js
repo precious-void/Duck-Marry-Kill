@@ -1,22 +1,20 @@
-window.onload = function() {
-    var radios = document.getElementsByClassName("radioRating");
-    for(var i=0; i<radios.length; i++) {
-        radios[i].onclick = function() {
-            rating();
-        }
-    }
 
+
+window.onload = function() {
+    
+    // var radios = document.getElementsByClassName("radioRating");
+
+    var pole = ["fuck", "marry", "kill"];
+    for(var i=0; i< 3; i++) {
+        rating(pole[i]);
+    }
     if(getCookie("gender")==null) {
         setCookie("gender", "female", 7);
     }
-
-    imgs = document.getElementsByClassName("imgRating");
-    imgTexts = document.getElementsByClassName("imgRatingText");
-
-    rating();
+    // imgs = document.getElementsByClassName("imgRating");
+    // imgTexts = document.getElementsByClassName("imgRatingText");
     switchGender(false);
-    setTimeout("switchImg.style.opacity = 1;", 500);
-    
+    // setTimeout("switchImg.style.opacity = 1;", 500);
 }
 
 // -------------------------------- Variables -------------------------------- //
@@ -26,7 +24,11 @@ var divsCreated = false;
 var xhr = new XMLHttpRequest;
 xhr.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
+
         var data = JSON.parse(this.responseText);
+        
+        console.log(data);
+
         if(!divsCreated) {
             createDivs(data.length);
             divsCreated = true;
@@ -51,9 +53,12 @@ function switchGender(b) {
         rating();
     }
     if(getCookie("gender") == "male") {
-        switchImg.style.transform="rotate(0deg)";
+        $(".nav-wrapper > .ham > i").css("color", "blue");
+        $("#nav-mobile > li:last-child i").css("color", "blue");
+
     } else {
-        switchImg.style.transform="rotate(180deg)";
+        $(".nav-wrapper > .ham > i").css("color", "red");
+        $("#nav-mobile > li:last-child i").css("color", "red");
     }
 }
 
@@ -74,9 +79,22 @@ function createDivs(size) {
 
 /* ------------------------------ Rating ------------------------------ */
 
-function rating() {
-    xhr.open("POST", "/api/users/rating", true);
-    xhr.send(JSON.stringify({Sex: getCookie("gender"), Stat: document.querySelector('input[name="stat"]:checked').value}));
+function rating(action) {
+    return $.ajax
+    ({
+        type: "POST",
+        url: '/api/users/rating',
+        dataType: 'json',
+        async: true,
+        data: {Sex: getCookie("gender"), Stat: action},
+        success: function (data) {
+            console.log(data);
+            return data;
+        },
+        error: function() {
+            return null;
+        }
+    })
 }
 
 /* ------------------------------ Cookies ------------------------------ */
